@@ -18,7 +18,7 @@ A web app for handling food catering orders
 - SQL
 
 ### Payment Gatway
--Midtrans
+- Midtrans
 
 ## Feature
 - Login & Register
