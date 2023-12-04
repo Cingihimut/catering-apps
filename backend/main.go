@@ -1,7 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Cingihimut/catering-apps/internal/config"
+	"github.com/gin-gonic/gin"
+)
+
+func init() {
+	config.LoadEnvVar()
+	config.ConnectToDB()
+}
 
 func main() {
-	fmt.Println("Hai semua")
+	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	r.Run()
 }
