@@ -15,7 +15,7 @@ A web app for handling food catering orders
 - Gorm
 
 ### Database
-- SQL
+- PostgreSQL
 
 ### Payment Gatway
 - Midtrans
