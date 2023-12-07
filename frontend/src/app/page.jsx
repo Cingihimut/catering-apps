@@ -20,7 +20,7 @@ export default function Home() {
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Makan apa hari ini?</AccordionTrigger>
-            <AccordionContent>Yaha</AccordionContent>
+            <AccordionContent>Makan daging dengan sayur kol</AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
