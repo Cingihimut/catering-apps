@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/Cingihimut/catering-apps/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,6 +23,10 @@ func InitDB() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := db.AutoMigrate(&models.Users{}, &models.Products{}); err != nil {
 		log.Fatal(err)
 	}
 

@@ -29,7 +29,7 @@ func (controller *User) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	config.DB.Exec("INSERT INTO users (username, email) VALUES (?, ?)", user.Username, user.Email)
+	config.DB.Exec("INSERT INTO users (userEmail, userName) VALUES (?, ?)", user.UserName, user.UserEmail)
 	c.JSON(http.StatusCreated, user)
 }
 
@@ -40,7 +40,7 @@ func (controller *User) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	config.DB.Exec("UPDATE users SET username = ?, email = ? WHERE id = ?", user.Username, user.Email, id)
+	config.DB.Exec("UPDATE users SET username = ?, email = ? WHERE id = ?", user.UserName, user.UserEmail, id)
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 

@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/Cingihimut/catering-apps/config"
+	"github.com/Cingihimut/catering-apps/controllers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,11 +16,9 @@ func init() {
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	userController := &controllers.User{}
+
+	r.GET("/", userController.Get)
 
 	port := os.Getenv("SERVER_PORT")
 	if port == "" {
