@@ -1,12 +1,11 @@
 package config
 
 import (
-	"log"
-
 	"github.com/joho/godotenv"
+	"log"
 )
 
-func LoadEnvVar() {
+func LoadEnv() {
 	err := godotenv.Load()
 
 	if err != nil {

@@ -1,13 +1,15 @@
 package main
 
 import (
-	"github.com/Cingihimut/catering-apps/internal/config"
+	"os"
+
+	"github.com/Cingihimut/catering-apps/config"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	config.LoadEnvVar()
-	config.ConnectToDB()
+	config.LoadEnv()
+	config.InitDB()
 }
 
 func main() {
@@ -19,5 +21,10 @@ func main() {
 		})
 	})
 
-	r.Run()
+	port := os.Getenv("SERVER_PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	r.Run(":" + port)
 }
