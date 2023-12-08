@@ -4,32 +4,27 @@ import (
 	"net/http"
 
 	"github.com/Cingihimut/catering-apps/config"
+	"github.com/Cingihimut/catering-apps/models"
 	"github.com/gin-gonic/gin"
 )
-
-type Users struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-}
 
 type User struct{}
 
 func (controller *User) Get(c *gin.Context) {
-	var users []Users
+	var users []models.Users
 	config.DB.Raw("SELECT * FROM users").Scan(&users)
 	c.JSON(http.StatusOK, users)
 }
 
 func (controller *User) GetOne(c *gin.Context) {
-	var user Users
+	var user models.Users
 	id := c.Param("id")
 	config.DB.Raw("SELECT * FROM users WHERE id = ?", id).Scan(&user)
 	c.JSON(http.StatusOK, user)
 }
 
 func (controller *User) Create(c *gin.Context) {
-	var user Users
+	var user models.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -39,7 +34,7 @@ func (controller *User) Create(c *gin.Context) {
 }
 
 func (controller *User) Update(c *gin.Context) {
-	var user Users
+	var user models.Users
 	id := c.Param("id")
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
