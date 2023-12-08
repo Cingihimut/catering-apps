@@ -1,29 +1,35 @@
 package main
 
 import (
-	"os"
+	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/Cingihimut/catering-apps/config"
 	"github.com/Cingihimut/catering-apps/controllers"
-	"github.com/gin-gonic/gin"
+	"github.com/Cingihimut/catering-apps/repositories"
+	"github.com/Cingihimut/catering-apps/routes"
+	"github.com/Cingihimut/catering-apps/services"
 )
 
-func init() {
-	config.LoadEnv()
-	config.InitDB()
-}
 
 func main() {
-	r := gin.Default()
+	config.LoadEnv()
 
-	userController := &controllers.User{}
+	appConfig := config.LoadAppConfig()
 
-	r.GET("/", userController.Get)
 
-	port := os.Getenv("SERVER_PORT")
-	if port == "" {
-		port = "8080"
+	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
+	sellerService := services.NewSellerService(*sellerRepository)
+	sellerController := controllers.NewSellerController(sellerService)
+	
+	routes.InitSellerRoutes(appConfig.App, sellerController)
+
+
+	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
+	log.Printf("Server is running on %s\n", serverAddress)
+	err := http.ListenAndServe(serverAddress, appConfig.App)
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
 	}
-
-	r.Run(":" + port)
 }
