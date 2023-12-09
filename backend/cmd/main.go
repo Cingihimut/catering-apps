@@ -29,6 +29,12 @@ func main() {
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
 
+	// catering route
+	cateringRepository := repositories.NewCateringRepository(appConfig.DB)
+	cateringService := services.NewCateringService(*cateringRepository)
+	cateringController := controllers.NewCateringController(cateringService)
+	routes.InitCateringRoutes(appConfig.App, cateringController)
+
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)
