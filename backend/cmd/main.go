@@ -12,19 +12,20 @@ import (
 	"github.com/Cingihimut/catering-apps/services"
 )
 
-
 func main() {
 	config.LoadEnv()
 
 	appConfig := config.LoadAppConfig()
 
-
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
 	sellerService := services.NewSellerService(*sellerRepository)
 	sellerController := controllers.NewSellerController(sellerService)
-	
 	routes.InitSellerRoutes(appConfig.App, sellerController)
 
+	userRepository := repositories.NewUserRepository(appConfig.DB)
+	userService := services.NewUserService(*userRepository)
+	userController := controllers.NewUserController(userService)
+	routes.InitUserRoutes(appConfig.App, userController)
 
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)
