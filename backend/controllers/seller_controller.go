@@ -26,7 +26,7 @@ func (c *SellerController) Create(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&seller); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status" : "error",
+			"status":  "error",
 			"message": err.Error(),
 		})
 		return
@@ -35,26 +35,25 @@ func (c *SellerController) Create(ctx *gin.Context) {
 	createdSeller, err := c.SellerService.CreateSeller(&seller)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": "error",
+			"status":  "error",
 			"message": err.Error(),
 		})
 		return
 	}
-	
+
 	sellerResponse := converter.ConvertToSellerResponse(createdSeller)
 	ctx.JSON(http.StatusCreated, gin.H{
-		"status" : "success",
-		"data": sellerResponse,
+		"status": "success",
+		"data":   sellerResponse,
 	})
 }
-
 
 func (c *SellerController) Login(ctx *gin.Context) {
 	var seller models.Sellers
 
 	if err := ctx.ShouldBindJSON(&seller); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status" : "error",
+			"status":  "error",
 			"message": err.Error(),
 		})
 		return
@@ -82,9 +81,8 @@ func (c *SellerController) Login(ctx *gin.Context) {
 		return
 	}
 
-
 	ctx.JSON(http.StatusCreated, gin.H{
-		"status" : "success",
-		"token": token,
+		"status": "success",
+		"token":  token,
 	})
 }

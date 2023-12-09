@@ -31,7 +31,6 @@ func (s *SellerService) CreateSeller(seller *models.Sellers) (*models.Sellers, e
 	return createdSeller, nil
 }
 
-
 func (s *SellerService) LoginSeller(email string) (*models.Sellers, error) {
 	seller, err := s.SellerRepository.FindByEmail(email)
 	if err != nil {
@@ -41,12 +40,11 @@ func (s *SellerService) LoginSeller(email string) (*models.Sellers, error) {
 	return seller, nil
 }
 
-
 func (s *SellerService) GenerateToken(seller *models.Sellers) (string, error) {
 	claims := jwt.MapClaims{
 		"id":    seller.ID,
 		"email": seller.Email,
-		"exp":   time.Now().Add(time.Hour * 24).Unix(), 
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -58,4 +56,3 @@ func (s *SellerService) GenerateToken(seller *models.Sellers) (string, error) {
 
 	return signedToken, nil
 }
-

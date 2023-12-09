@@ -35,5 +35,3 @@ func (r *SellerRepository) FindByEmail(email string) (*models.Sellers, error) {
 
 	return &seller, nil
 }
-
-
