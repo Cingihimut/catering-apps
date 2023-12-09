@@ -1,5 +1,3 @@
-// services/Seller_service.go
-
 package services
 
 import (

@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func InitDB() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%s",
 		os.Getenv("DB_HOST"),
@@ -30,7 +29,6 @@ func InitDB() (*gorm.DB, error) {
 		log.Fatal(err)
 		return nil, fmt.Errorf("failed to migrate database: %v", err)
 	}
-	
 
 	return db, nil
 }

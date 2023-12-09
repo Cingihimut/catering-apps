@@ -17,16 +17,19 @@ func main() {
 
 	appConfig := config.LoadAppConfig()
 
+	// seller route
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
 	sellerService := services.NewSellerService(*sellerRepository)
 	sellerController := controllers.NewSellerController(sellerService)
 	routes.InitSellerRoutes(appConfig.App, sellerController)
 
+	// user route
 	userRepository := repositories.NewUserRepository(appConfig.DB)
 	userService := services.NewUserService(*userRepository)
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
 
+	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)
 	err := http.ListenAndServe(serverAddress, appConfig.App)
