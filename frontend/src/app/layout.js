@@ -1,9 +1,10 @@
-import { Gabarito } from "next/font/google";
 import "@/app/globals.css";
-import NavBar from "@/components/NavBar/index";
-import Footer from "@/components/Footer";
+import { Inter  } from "next/font/google";
 
-const gabarito = Gabarito({ subsets: ["latin"] });
+const inter = Inter ({ 
+  subsets: ["latin"],
+  display: 'swap'
+});
 
 export const metadata = {
   title: "Catering apps",
@@ -12,10 +13,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${gabarito.className}`} suppressHydrationWarning={true}>
-        {children}
-      </body>
+    <html lang="en" className={inter.className}>
+      <body>{children}</body>
     </html>
   );
 }
