@@ -1,11 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 
-const Page = () => {
+const Menu = () => {
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <Link href="#">
-                <Image className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+                <Image className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" width={350} height={350} alt="" />
             </Link>
             <div className="p-5">
                 <Link href="#">
@@ -20,7 +20,6 @@ const Page = () => {
                 </Link>
             </div>
         </div>
-
     )
 }
-export default Page
+export default Menu
