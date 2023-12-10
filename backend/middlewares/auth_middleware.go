@@ -36,7 +36,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		if err != nil || !token.Valid {
 			fmt.Println(err.Error())
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"status": "error",
+				"status":  "error",
 				"message": "Invalid token",
 			})
 			ctx.Abort()
@@ -46,14 +46,14 @@ func AuthMiddleware() gin.HandlerFunc {
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"status": "error",
+				"status":  "error",
 				"message": "Failed to parse",
 			})
 			ctx.Abort()
 			return
 		}
 
-		ctx.Set("userID", claims["user_id"])
+		ctx.Set("id", claims["id"])
 		ctx.Next()
 	}
 }

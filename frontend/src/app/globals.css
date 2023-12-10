@@ -1,5 +1,8 @@
 @tailwind base;
 @tailwind components;
+<<<<<<< HEAD
+@tailwind utilities;
+=======
 @tailwind utilities;
 
 @layer base {
@@ -109,3 +112,4 @@ a {
     max-width: 475px;
   }
 }
+>>>>>>> 0ca57cf31d383e4aa317ee058a7882b7967ad705

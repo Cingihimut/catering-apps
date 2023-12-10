@@ -9,20 +9,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SellerController struct {
-	SellerService *services.SellerService
+type UserController struct {
+	UserService *services.UserService
 }
 
-func NewSellerController(SellerService *services.SellerService) *SellerController {
-	return &SellerController{
-		SellerService: SellerService,
+func NewUserController(UserService *services.UserService) *UserController {
+	return &UserController{
+		UserService: UserService,
 	}
 }
 
-func (c *SellerController) Create(ctx *gin.Context) {
-	var seller models.Sellers
+func (u *UserController) Create(ctx *gin.Context) {
+	var user models.Users
 
-	if err := ctx.ShouldBindJSON(&seller); err != nil {
+	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -30,7 +30,7 @@ func (c *SellerController) Create(ctx *gin.Context) {
 		return
 	}
 
-	createdSeller, err := c.SellerService.CreateSeller(&seller)
+	createdUser, err := u.UserService.CreateUser(&user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -39,17 +39,17 @@ func (c *SellerController) Create(ctx *gin.Context) {
 		return
 	}
 
-	sellerResponse := converter.ConvertToSellerResponse(createdSeller)
+	userResponse := converter.ConvertToUserResponse(createdUser)
 	ctx.JSON(http.StatusCreated, gin.H{
 		"status": "success",
-		"data":   sellerResponse,
+		"data":   userResponse,
 	})
 }
 
-func (c *SellerController) Login(ctx *gin.Context) {
-	var seller models.Sellers
+func (u *UserController) Login(ctx *gin.Context) {
+	var user models.Users
 
-	if err := ctx.ShouldBindJSON(&seller); err != nil {
+	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -57,7 +57,7 @@ func (c *SellerController) Login(ctx *gin.Context) {
 		return
 	}
 
-	existingSeller, err := c.SellerService.LoginSeller(seller.Email)
+	existingUser, err := u.UserService.LoginUser(user.Email)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -65,7 +65,7 @@ func (c *SellerController) Login(ctx *gin.Context) {
 		})
 		return
 	}
-	if existingSeller.Password != seller.Password {
+	if existingUser.Password != user.Password {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status":  "error",
 			"message": "Invalid password",
@@ -73,7 +73,7 @@ func (c *SellerController) Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := c.SellerService.GenerateToken(existingSeller)
+	token, err := u.UserService.GenerateToken(existingUser)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
