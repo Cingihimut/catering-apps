@@ -17,6 +17,8 @@ func main() {
 
 	appConfig := config.LoadAppConfig()
 
+	
+
 	// seller route
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
 	sellerService := services.NewSellerService(*sellerRepository)

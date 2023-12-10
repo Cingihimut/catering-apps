@@ -7,13 +7,15 @@ import (
 )
 
 func InitCateringRoutes(router *gin.Engine, cateringController *controllers.CateringController) {
+	
 	cateringGroup := router.Group("/api/catering")
 
-	// cateringGroup.GET("/", userController.CreateUser)
+	// cateringGroup.GET("/", cateringController.GetAllCatering)
 	{
 		cateringGroup.Use(middlewares.AuthMiddleware())
 		{
 			cateringGroup.POST("/", cateringController.Create)
+			cateringGroup.GET("/", cateringController.GetCateringBySellerID)
 		}
 	}
 }

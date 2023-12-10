@@ -18,48 +18,30 @@ func NewCateringService(CateringRepository repositories.CateringRepository) *Cat
 	}
 }
 
-func (s *CateringService) Create( catering *models.Caterings, files []*multipart.FileHeader) (*models.Caterings, error) {
-
-	tx := s.CateringRepository.BeginTransaction()
-
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Exec("ROLLBACK")
-		}
-	}()
-
-	catering,err := s.CateringRepository.Create(tx, catering)
+func (s *CateringService) Create( catering *models.Caterings, imageURLs []string) (*models.Caterings, error) {
+	createdCatering, err := s.CateringRepository.Create(catering)
 	if err != nil {
-		tx.Exec("ROLLBACK")
 		return nil, err
 	}
-
-	imageURLs, err := s.saveCateringImages(catering.ID, files)
-	if err != nil {
-		tx.Exec("ROLLBACK")
-		return nil, err
-	}
-
+	var cateringImage models.CateringImages
 	for _, imageURL := range imageURLs {
-		cateringImages := models.CateringImages{
-			CateringID: catering.ID,
-			ImageURL:  imageURL,
-		}
-
-		if _,err := s.CateringRepository.CreateImage(tx, &cateringImages); err != nil {
-			tx.Exec("ROLLBACK")
+		
+		cateringImage.CateringID = createdCatering.ID
+		cateringImage.ImageURL = imageURL
+		
+		_, err := s.CateringRepository.CreateImage( &cateringImage)
+		if err != nil {
+			
 			return nil, err
 		}
 	}
-	tx.Exec("COMMIT")
-	return catering, nil
+
+	return createdCatering, nil
 }
 
 
 
-
-
-func (s *CateringService) saveCateringImages( cateringID uint, files []*multipart.FileHeader) ([]string, error) {
+func (s *CateringService) SaveImages(files []*multipart.FileHeader) ([]string, error) {
 	var imageURLs []string
 
 	for _, file := range files {
@@ -74,3 +56,21 @@ func (s *CateringService) saveCateringImages( cateringID uint, files []*multipar
 	return imageURLs, nil
 }
 
+
+func (s *CateringService) GetAllCatering() ([]models.Caterings, error) {
+	caterings, err := s.CateringRepository.GetAllCatering()
+	if err != nil {
+		return nil, err
+	}
+	return caterings, nil
+}
+
+
+
+func (s *CateringService) GetCateringBySellerID(cateringID uint) (*models.Caterings, error) {
+	catering, err := s.CateringRepository.GetCateringByID(cateringID)
+	if err != nil {
+		return nil, err
+	}
+	return catering, nil
+}

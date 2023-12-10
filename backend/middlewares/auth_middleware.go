@@ -9,20 +9,30 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
+const (
+    authorizationHeader = "Authorization"
+    bearerPrefix        = "Bearer "
+)
+
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		tokenString := ctx.GetHeader("Authorization")
+		tokenString := ctx.GetHeader(authorizationHeader)
 
+		
 		if tokenString == "" {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"status":  "error",
+				"message": "Unauthorized"})
 			ctx.Abort()
 			return
 		}
 
-		splitToken := strings.Split(tokenString, "Bearer ")
+		splitToken := strings.Split(tokenString, bearerPrefix)
 		if len(splitToken) != 2 {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"status":  "error",
+				"message": "Invalid token format"})
 			ctx.Abort()
 			return
 		}
@@ -37,7 +47,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			fmt.Println(err.Error())
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"status":  "error",
-				"message": "Invalid token",
+				"message": "Invalid token: " + err.Error(),
 			})
 			ctx.Abort()
 			return
@@ -52,8 +62,17 @@ func AuthMiddleware() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+		userId, ok := claims["id"].(float64)
+		if !ok {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "Failed to parse user ID",
+			})
+			ctx.Abort()
+			return
+		}
+		ctx.Set("id", uint(userId))
 
-		ctx.Set("id", claims["id"])
 		ctx.Next()
 	}
 }
