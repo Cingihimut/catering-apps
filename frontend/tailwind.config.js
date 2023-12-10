@@ -16,11 +16,13 @@ module.exports = {
     colors: {
       color:{
         primary: "#eeeeee",
+        white: "#ffffff",
         accent: "#ffc639",
         secondary: "#393e46",
         dark: "#222831",
         blackMode: "#000000",
-        third : "#17bd1f"
+        third : "#17bd1f",
+        monocrome: "#555755"
       }
     },
   },
