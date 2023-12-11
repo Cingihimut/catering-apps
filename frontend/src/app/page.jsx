@@ -8,14 +8,12 @@ const Page = () => {
   return (
     <>
       <NavBar/>
-        <main className="App">
-          <div className="max-w-lg">
-            <Carousel>
-              
-            </Carousel>
+        <main>
+          <div className="py-6">
+            <Carousel/>
           </div>
-
         </main>
+        <p className="font-bold p-4">Kategori</p>
         <Kategori/>
       <Footer/>
     </>

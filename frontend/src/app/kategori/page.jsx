@@ -2,10 +2,10 @@ import Image from "next/image"
 
 const Kategori = () => {
     return(
-        <div className="px-4 border rounded-xl" style={{
+        <div className="p-4 border rounded-xl" style={{
             boxShadow: "3px 0 3px 0 rgba(0.5, 0.5, 0.5, 0.5)"
         }}>
-            <div className="grid grid-cols-2 py-4">
+            <div className="grid grid-cols-2 p-4">
                 <Image 
                     src={'/public/assets/Banner-1.png'}
                     height={100}
