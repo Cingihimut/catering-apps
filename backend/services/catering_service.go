@@ -19,22 +19,27 @@ func NewCateringService(CateringRepository repositories.CateringRepository) *Cat
 }
 
 func (s *CateringService) Create( catering *models.Caterings, imageURLs []string) (*models.Caterings, error) {
-	createdCatering, err := s.CateringRepository.Create(catering)
+	tx := s.CateringRepository.DB.Begin()
+	createdCatering, err := s.CateringRepository.Create(tx,catering)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
-	var cateringImage models.CateringImages
+
 	for _, imageURL := range imageURLs {
-		
-		cateringImage.CateringID = createdCatering.ID
-		cateringImage.ImageURL = imageURL
-		
-		_, err := s.CateringRepository.CreateImage( &cateringImage)
-		if err != nil {
-			
+		cateringImage := models.CateringImages{
+			CateringID: createdCatering.ID,
+			ImageURL:   imageURL,
+		}
+	
+		if _, err := s.CateringRepository.SaveImage(tx, &cateringImage); err != nil {
+			tx.Rollback()
 			return nil, err
 		}
+		createdCatering.Images = append(createdCatering.Images, cateringImage)
+
 	}
+	tx.Commit()
 
 	return createdCatering, nil
 }
@@ -59,10 +64,15 @@ func (s *CateringService) SaveImages(files []*multipart.FileHeader) ([]string, e
 
 func (s *CateringService) GetAllCatering() ([]models.Caterings, error) {
 	caterings, err := s.CateringRepository.GetAllCatering()
-	if err != nil {
-		return nil, err
-	}
-	return caterings, nil
+    if err != nil {
+        return nil, err
+    }
+
+    for i := range caterings {
+        s.CateringRepository.LoadImages(&caterings[i])
+    }
+
+    return caterings, nil
 }
 
 

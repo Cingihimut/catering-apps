@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/Cingihimut/catering-apps/models"
 	"github.com/Cingihimut/catering-apps/services"
+	"github.com/Cingihimut/catering-apps/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -60,7 +62,8 @@ func (c *CateringController) Create(ctx *gin.Context) {
 			"message": err.Error(),
 		})
 	}
-
+	fmt.Println(form)
+	fmt.Println(imageURLs)
 	createdCatering, err := c.CateringService.Create(&catering, imageURLs)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -93,17 +96,15 @@ func (c *CateringController) GetAllCatering(ctx *gin.Context) {
 
 func (c *CateringController) GetCateringBySellerID(ctx *gin.Context) {
 
-	sellerId, exist := ctx.Get("id")
-	if !exist{
+	userId := ctx.Param("sellerId")
+	sellerId, err := utils.ParseStrParamsToUint(userId)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
-			"message": "Seller Id not found",
-		})
-        return
+			"message":  "Invalid user ID"})
+		return
 	}
-	uintId := sellerId.(uint)
-	
-	catering, err := c.CateringService.GetCateringBySellerID(uint(uintId))
+	catering, err := c.CateringService.GetCateringBySellerID(sellerId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

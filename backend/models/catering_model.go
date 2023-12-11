@@ -14,7 +14,8 @@ type Caterings struct {
 	Description  string         `json:"description"`
 	Price        float64        `json:"price"`
 	Images       []CateringImages `gorm:"foreignKey:CateringID" json:"images"`
-	CreatedAt    time.Time      `json:"created_at"`
-	UpdatedAt    time.Time      `json:"updated_at"`
+	CreatedAt    time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt    time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-"`
 }
+
