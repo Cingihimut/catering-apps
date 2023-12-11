@@ -79,7 +79,7 @@ func (c *SellerController) Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"token":  token,
 	})
