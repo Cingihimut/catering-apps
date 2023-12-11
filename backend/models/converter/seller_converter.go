@@ -16,7 +16,7 @@ type SellerResponse struct {
 
 func ConvertToSellerResponse(seller *models.Sellers) *SellerResponse {
 	return &SellerResponse{
-		ID:        seller.ID,
+		ID: seller.ID,
 		Email:     seller.Email,
 		Username:  seller.UserName,
 		CreatedAt: seller.CreatedAt,

@@ -17,6 +17,8 @@ func main() {
 
 	appConfig := config.LoadAppConfig()
 
+	
+
 	// seller route
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
 	sellerService := services.NewSellerService(*sellerRepository)
@@ -28,6 +30,12 @@ func main() {
 	userService := services.NewUserService(*userRepository)
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
+
+	// catering route
+	cateringRepository := repositories.NewCateringRepository(appConfig.DB)
+	cateringService := services.NewCateringService(*cateringRepository)
+	cateringController := controllers.NewCateringController(cateringService)
+	routes.InitCateringRoutes(appConfig.App, cateringController)
 
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
