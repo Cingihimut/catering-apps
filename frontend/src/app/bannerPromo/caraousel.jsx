@@ -26,8 +26,8 @@ const Carousel = () => {
       <Image
         src={images[currentImage]}
         alt={`Image ${currentImage + 1}`}
-        width={600}
-        height={400}
+        width={300}
+        height={100}
         className="w-full h-64 object-cover rounded-lg"
         onError={(e) => console.error(`Error loading image: ${e.target.src}`)}
       />
