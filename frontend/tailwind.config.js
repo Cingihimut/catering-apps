@@ -21,7 +21,7 @@ module.exports = {
         secondary: "#393e46",
         dark: "#222831",
         blackMode: "#000000",
-        third : "#17bd1f",
+        third : "#2157eb",
         monocrome: "#555755"
       }
     },
