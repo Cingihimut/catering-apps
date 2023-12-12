@@ -79,7 +79,7 @@ func (c *CateringController) Create(ctx *gin.Context) {
 	})
 }
 
-func (c *CateringController) GetAllCatering(ctx *gin.Context) {
+func (c *CateringController) GetAll(ctx *gin.Context) {
 	caterings, err := c.CateringService.GetAllCatering()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
