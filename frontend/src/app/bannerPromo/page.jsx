@@ -5,10 +5,10 @@ import { useState } from 'react';
 
 const Carousel = () => {
   const images = [
-    '/public/assets/Banner-1.png',
-    '/public/assets/Banner-2.png',
-    '/public/assets/Banner-3.png',
-    '/public/assets/Banner-4.png',
+    '@/public/assets/Banner-1.png',
+    '@/public/assets/Banner-2.png',
+    '@/public/assets/Banner-3.png',
+    '@/public/assets/Banner-4.png',
   ];
 
   const [currentImage, setCurrentImage] = useState(0);

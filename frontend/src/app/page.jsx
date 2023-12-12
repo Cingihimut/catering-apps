@@ -13,7 +13,7 @@ const Page = () => {
             <Carousel/>
           </div>
         </main>
-        <p className="font-bold p-4">Kategori</p>
+        <p className="font-bold p-4 text-2xl">Kategori</p>
         <Kategori/>
       <Footer/>
     </>
