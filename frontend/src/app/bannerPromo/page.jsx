@@ -1,59 +1,39 @@
-import Image from "next/image"
+"use client"
+import { ArrowCircleLeft, ArrowCircleRight } from '@phosphor-icons/react';
+import Image from 'next/image';
+import { useState } from 'react';
 
-const Banner = () => {
-    return (
-        <div id="default-carousel" className="relative w-full" data-carousel="slide">
-            <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-                <div>
-                    <Image 
-                        src={'/Banner-1.png'}
-                        width={700}
-                        height={300}
-                        alt="Banner 1"
-                    />
-                    <Image 
-                        src={'/Banner-2.png'}
-                        width={700}
-                        height={300}
-                        alt="Banner 1"
-                    />
-                    <Image 
-                        src={'/Banner-3.png'}
-                        width={700}
-                        height={300}
-                        alt="Banner 1"
-                    />
-                    <Image 
-                        src={'/Banner-4.png'}
-                        width={700}
-                        height={300}
-                        alt="Banner 1"
-                    />
-                </div>
-            </div>
-            <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-            </div>
-            <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg className="w-4 h-4 text-black dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
-                    </svg>
-                </span>
-            </button>
-            <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg className="w-4 h-4 text-black dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                    </svg>
-                </span>
-            </button>
-        </div>
+const Carousel = () => {
+  const images = [
+    '/public/assets/Banner-1.png',
+    '/public/assets/Banner-2.png',
+    '/public/assets/Banner-3.png',
+    '/public/assets/Banner-4.png',
+  ];
 
-    )
-}
-export default Banner
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <div className="relative p-4">
+      <Image src={`/images/${images[currentImage]}`} alt={`Image ${currentImage + 1}`} width={700} height={300} className="w-full h-64 object-cover rounded-l" />
+      <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-between p-4">
+        <button onClick={prevImage} className="text-white bg-gray-800 px-4 py-2 rounded-full opacity-75 hover:opacity-100">
+            <ArrowCircleLeft size={20} />
+        </button>
+        <button onClick={nextImage} className="text-white bg-gray-800 px-4 py-2 rounded-full opacity-75 hover:opacity-100">
+            <ArrowCircleRight size={20} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Carousel;

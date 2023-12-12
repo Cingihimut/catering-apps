@@ -9,13 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@phosphor-icons/react": "^2.0.15",
     "flowbite": "^2.2.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
+<<<<<<< HEAD
     "swagger-ui": "^5.10.3",
     "swagger-ui-react": "^5.10.3"
+=======
+    "tw-elements-react": "^1.0.0-alpha2"
+>>>>>>> 0bd69da8cbee0b078cee96f891594577fdbce120
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

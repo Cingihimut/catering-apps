@@ -63,7 +63,7 @@ func (s *CateringService) SaveImages(files []*multipart.FileHeader) ([]string, e
 
 
 func (s *CateringService) GetAllCatering() ([]models.Caterings, error) {
-	caterings, err := s.CateringRepository.GetAllCatering()
+	caterings, err := s.CateringRepository.GetAllCateringFromDB()
     if err != nil {
         return nil, err
     }
