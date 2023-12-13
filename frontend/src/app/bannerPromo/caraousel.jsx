@@ -5,10 +5,10 @@ import { useState } from "react";
 
 const Carousel = () => {
   const images = [
-    "/assets/Banner-1.png",
-    "/assets/Banner-2.png",
-    "/assets/Banner-3.png",
-    "/assets/Banner-4.png",
+    "/assets/Banner-1-min.png",
+    "/assets/Banner-2-min.png",
+    "/assets/Banner-3-min.png",
+    "/assets/Banner-4-min.png",
   ];
 
   const [currentImage, setCurrentImage] = useState(0);
@@ -26,9 +26,9 @@ const Carousel = () => {
       <Image
         src={images[currentImage]}
         alt={`Image ${currentImage + 1}`}
-        width={700}
-        height={300}
-        className="w-full h-64 object-cover rounded-l"
+        width={300}
+        height={100}
+        className="w-full h-64 object-cover rounded-lg"
         onError={(e) => console.error(`Error loading image: ${e.target.src}`)}
       />
 

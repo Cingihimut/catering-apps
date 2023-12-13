@@ -4,6 +4,9 @@ const nextConfig = {
         remotePatterns: [
             {
                 hostname: "flowbite.s3.amazonaws.com"
+            },
+            {
+                hostname: "avatars.githubusercontent.com"
             }
         ]
     }
