@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import "../globals.css";
-
-const Register = () => {
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -26,8 +27,8 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Data respons JSON:", data);
+        router.push("/");
         console.log(data);
-        console.log("Registrasi berhasil!");
       } else {
         const gagal = await response.json();
         console.log("Data respons JSON:", gagal);
@@ -67,9 +68,9 @@ const Register = () => {
           </label>
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
-            <a href="/register" className="text-blue-500 hover:underline">
+            <Link href="/register" className="text-blue-500 hover:underline">
               Register here
-            </a>
+            </Link>
           </p>
           <button
             type="submit"
@@ -82,5 +83,4 @@ const Register = () => {
     </div>
   );
 };
-
-export default Register;
+export default Login;
