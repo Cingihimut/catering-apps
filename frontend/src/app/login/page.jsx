@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import "../globals.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import decodeToken from "@/utils/decodeToken";
+import useStore from "@/stores/store";
+
 const Login = () => {
+  const setUser = useStore((state) => state.setUser);
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -26,9 +31,11 @@ const Login = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log("Data respons JSON:", data);
+        localStorage.setItem("accessToken", data.token);
+        console.log(data.token);
+        const decodedUser = decodeToken(data.token);
+        setUser({ email: decodedUser.email, id: decodedUser.id });
         router.push("/");
-        console.log(data);
       } else {
         const gagal = await response.json();
         console.log("Data respons JSON:", gagal);
