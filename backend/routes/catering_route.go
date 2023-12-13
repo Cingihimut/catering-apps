@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"net/http"
 
 	"github.com/Cingihimut/catering-apps/controllers"
 	"github.com/Cingihimut/catering-apps/middlewares"
@@ -10,17 +9,10 @@ import (
 
 func InitCateringRoutes(router *gin.Engine, cateringController *controllers.CateringController) {
 	
-	cateringGroup := router.Group("/api/caterings")
-	cateringGroup.Use(func(c *gin.Context) {
-        if c.Request.URL.Path != "/" && c.Request.URL.Path[len(c.Request.URL.Path)-1] == '/' {
-            c.Redirect(http.StatusMovedPermanently, c.Request.URL.Path[:len(c.Request.URL.Path)-1])
-            return
-        }
-        c.Next()
-    })
-	cateringGroup.GET("/", cateringController.GetAll)
-	cateringGroup.GET("/:sellerId", cateringController.GetCateringBySellerID)
-    cateringGroup.POST("/",middlewares.AuthMiddleware(), cateringController.Create)
+
+	router.GET("/api/caterings", cateringController.GetAll)
+	router.GET("/api/caterings/:sellerId", cateringController.GetCateringBySellerID)
+    router.POST("/api/caterings",middlewares.AuthMiddleware(), cateringController.Create)
 
    
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-
 	"github.com/Cingihimut/catering-apps/models"
 	"github.com/Cingihimut/catering-apps/models/converter"
 	"github.com/Cingihimut/catering-apps/services"
@@ -21,7 +20,6 @@ func NewSellerController(SellerService *services.SellerService) *SellerControlle
 
 func (c *SellerController) Create(ctx *gin.Context) {
 	var seller models.Sellers
-
 	if err := ctx.ShouldBindJSON(&seller); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

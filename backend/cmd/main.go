@@ -11,7 +11,6 @@ import (
 	"github.com/Cingihimut/catering-apps/routes"
 	"github.com/Cingihimut/catering-apps/services"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -20,15 +19,12 @@ func main() {
 	appConfig := config.LoadAppConfig()
 
 	// Allow CORS
-	appConfig.App.Use(cors.Default())
-	// Handle Trailing Slah from grouping
-	appConfig.App.Use(func(c *gin.Context) {
-        if c.Request.URL.Path != "/" && c.Request.URL.Path[len(c.Request.URL.Path)-1] == '/' {
-            c.Redirect(http.StatusMovedPermanently, c.Request.URL.Path[:len(c.Request.URL.Path)-1])
-            return
-        }
-        c.Next()
-    })
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"} 
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"*"}
+	appConfig.App.Use(cors.New(config))
+	
 	
 	// seller route
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
