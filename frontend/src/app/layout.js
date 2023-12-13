@@ -1,4 +1,6 @@
 import "@/app/globals.css";
+import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 import { Inter  } from "next/font/google";
 
 const inter = Inter ({ 
@@ -14,7 +16,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.className}>
-      <body>{children}</body>
+      <NavBar/>
+        {children}
+      <Footer/>
     </html>
   );
 }

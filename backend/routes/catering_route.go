@@ -1,6 +1,7 @@
 package routes
 
 import (
+
 	"github.com/Cingihimut/catering-apps/controllers"
 	"github.com/Cingihimut/catering-apps/middlewares"
 	"github.com/gin-gonic/gin"
@@ -8,14 +9,10 @@ import (
 
 func InitCateringRoutes(router *gin.Engine, cateringController *controllers.CateringController) {
 	
-	cateringGroup := router.Group("/api/caterings")
 
-	cateringGroup.GET("/", cateringController.GetAllCatering)
-	{
-		cateringGroup.Use(middlewares.AuthMiddleware())
-		{
-			cateringGroup.POST("/", cateringController.Create)
-			cateringGroup.GET("/:sellerId", cateringController.GetCateringBySellerID)
-		}
-	}
+	router.GET("/api/caterings", cateringController.GetAll)
+	router.GET("/api/caterings/:sellerId", cateringController.GetCateringBySellerID)
+    router.POST("/api/caterings",middlewares.AuthMiddleware(), cateringController.Create)
+
+   
 }

@@ -47,7 +47,7 @@ func (c *CateringRepository) SaveImage(tx *gorm.DB, cateringImages *models.Cater
 }
 
 
-func (c *CateringRepository) GetAllCatering() ([]models.Caterings, error) {
+func (c *CateringRepository) GetAllCateringFromDB() ([]models.Caterings, error) {
 	var caterings []models.Caterings
 	result := c.DB.Raw("SELECT * FROM caterings").Scan(&caterings)
 	fmt.Println(result)

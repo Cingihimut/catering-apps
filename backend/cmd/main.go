@@ -10,6 +10,7 @@ import (
 	"github.com/Cingihimut/catering-apps/repositories"
 	"github.com/Cingihimut/catering-apps/routes"
 	"github.com/Cingihimut/catering-apps/services"
+	"github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -17,8 +18,14 @@ func main() {
 
 	appConfig := config.LoadAppConfig()
 
+	// Allow CORS
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"} 
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"*"}
+	appConfig.App.Use(cors.New(config))
 	
-
+	
 	// seller route
 	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
 	sellerService := services.NewSellerService(*sellerRepository)
