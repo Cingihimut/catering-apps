@@ -17,38 +17,6 @@ const NavBar = () => {
           <UserActionButton />
         </div>
       </div>
-      <div className="flex justify-center">
-        <div className="px-4 gap-4 text-color-monocrome text-sm flex p-2">
-          <Link
-            href="../Menu/rekomendasi"
-            className="hover:text-color-dark transition duration-300 ease-in-out"
-            passHref
-          >
-            Rekomendasi kami
-          </Link>
-          <Link
-            href="../Menu/terbaik"
-            className="hover:text-color-dark transition duration-300 ease-in-out"
-            passHref
-          >
-            Pilihan Terbaik
-          </Link>
-          <Link
-            href="../Menu/terlaris"
-            className="hover:text-color-dark transition duration-300 ease-in-out"
-            passHref
-          >
-            Pilihan Terlaris
-          </Link>
-          <Link
-            href="/Menu"
-            className="hover:text-color-dark transition duration-300 ease-in-out"
-            passHref
-          >
-            Menu lengkap
-          </Link>
-        </div>
-      </div>
       <div className="flex justify-end">
         <svg
           xmlns="http://www.w3.org/2000/svg"

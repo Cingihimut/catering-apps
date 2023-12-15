@@ -1,9 +1,11 @@
 "use client";
+
 import { ArrowCircleLeft, ArrowCircleRight } from "@phosphor-icons/react";
 import Image from "next/image";
 import { useState } from "react";
 
 const Carousel = () => {
+
   const images = [
     "/assets/Banner-1-min.png",
     "/assets/Banner-2-min.png",
@@ -21,8 +23,10 @@ const Carousel = () => {
     setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
   };
 
+
   return (
     <div className="relative p-4">
+    
       <Image
         src={images[currentImage]}
         alt={`Image ${currentImage + 1}`}

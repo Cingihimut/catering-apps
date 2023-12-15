@@ -11,8 +11,8 @@ const Page = () => {
   return (
     <>
       <main>
-        <div className="py-6">
-          {user.email ? (
+        <div className="p-4">
+          {user.email ?(
             <h2>Selamat Datang {user.email}</h2>
           ) : (
             <p>Selamat Datang</p>
