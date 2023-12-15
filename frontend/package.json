@@ -14,7 +14,7 @@
     "@phosphor-icons/react": "^2.0.15",
     "dotenv": "^16.3.1",
     "flowbite": "^2.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "react": "^18",
