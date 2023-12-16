@@ -6,7 +6,7 @@ import "swagger-ui-react/swagger-ui.css";
 const SwaggerUI = () => {
   return (
     <div>
-      <SwaggerUIReact url="/api/api-spec.json" />;
+      <SwaggerUIReact url="/api-spec.json" />;
     </div>
   );
 };

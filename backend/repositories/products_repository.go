@@ -19,8 +19,7 @@ func NewProductRepository(db *gorm.DB) *ProductRepository {
 }
 
 func (c *ProductRepository) Create(tx *gorm.DB, product *models.Products) (*models.Products, error) {
-	query := "INSERT INTO products (product_name, description, price) VALUES (?, ?, ?, ?) RETURNING id"
-
+	query := "INSERT INTO products (product_name, description, price) VALUES (?, ?, ?) RETURNING id"
 	result := tx.Raw(query, product.ProductName, product.Description, product.Price).Row()
 
 	if result.Err() != nil {
@@ -32,17 +31,34 @@ func (c *ProductRepository) Create(tx *gorm.DB, product *models.Products) (*mode
 		return nil, err
 	}
 	product.ID = insertedID
+
 	return product, nil
 }
 
-func (c *ProductRepository) SaveImage(tx *gorm.DB, productImages *models.ProductImages) (*models.ProductImages, error) {
-	query := "INSERT INTO product_images (product_id, image_url) VALUES (?,?) RETURNING id"
-	result := tx.Raw(query, productImages.ProductID, productImages.ImageURL).Scan(&productImages.ID)
+func (c *ProductRepository) SaveCategories(tx *gorm.DB, productID uint, categories []models.Categories) error {
+	tx.Exec("DELETE FROM product_categories WHERE product_id = ?", productID)
 
-	if result.Error != nil {
-		log.Printf("Error executing query: %v\n", result.Error)
-		return nil, result.Error
+	for _, category := range categories {
+		tx.Exec("INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)", productID, category.ID)
 	}
+
+	return nil
+}
+
+func (c *ProductRepository) SaveImage(tx *gorm.DB, productImages *models.ProductImages) (*models.ProductImages, error) {
+	query := "INSERT INTO product_images (product_id, image_url) VALUES (?, ?) RETURNING id"
+	result := tx.Raw(query, productImages.ProductID, productImages.ImageURL).Row()
+
+	if result.Err() != nil {
+		return nil, result.Err()
+	}
+
+	var insertedID uint
+	if err := result.Scan(&insertedID); err != nil {
+		return nil, err
+	}
+	productImages.ID = insertedID
+
 	return productImages, nil
 }
 
@@ -74,4 +90,15 @@ func (r *ProductRepository) GetProductByID(productID uint) (*models.Products, er
 		return nil, result.Error
 	}
 	return &product, nil
+}
+
+func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
+	var products []models.Products
+
+	query := "SELECT * FROM products"
+	if err := r.DB.Raw(query).Find(&products).Error; err != nil {
+		return nil, err
+	}
+
+	return products, nil
 }

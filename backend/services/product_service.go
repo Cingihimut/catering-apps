@@ -17,11 +17,21 @@ func NewProductService(ProductRepository repositories.ProductRepository) *Produc
 		ProductRepository: ProductRepository,
 	}
 }
+func (p *ProductService) Create(product *models.Products, imageURLs []string) (*models.Products, error) {
+	tx := p.ProductRepository.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 
-func (s *ProductService) Create(product *models.Products, imageURLs []string) (*models.Products, error) {
-	tx := s.ProductRepository.DB.Begin()
-	createdProduct, err := s.ProductRepository.Create(tx, product)
+	createdProduct, err := p.ProductRepository.Create(tx, product)
 	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := p.ProductRepository.SaveCategories(tx, createdProduct.ID, product.Categories); err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -32,13 +42,13 @@ func (s *ProductService) Create(product *models.Products, imageURLs []string) (*
 			ImageURL:  imageURL,
 		}
 
-		if _, err := s.ProductRepository.SaveImage(tx, &productImage); err != nil {
+		if _, err := p.ProductRepository.SaveImage(tx, &productImage); err != nil {
 			tx.Rollback()
 			return nil, err
 		}
 		createdProduct.Images = append(createdProduct.Images, productImage)
-
 	}
+
 	tx.Commit()
 
 	return createdProduct, nil
@@ -72,10 +82,6 @@ func (s *ProductService) GetAllProduct() ([]models.Products, error) {
 	return products, nil
 }
 
-func (s *ProductService) GetProductBySellerID(productID uint) (*models.Products, error) {
-	product, err := s.ProductRepository.GetProductByID(productID)
-	if err != nil {
-		return nil, err
-	}
-	return product, nil
+func (s *ProductService) GetAllProducts() ([]models.Products, error) {
+	return s.ProductRepository.GetAllProducts()
 }

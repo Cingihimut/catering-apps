@@ -44,7 +44,7 @@ func (r *UserRepository) FindByEmail(user *models.Users) (*models.Users, error) 
 func (r *UserRepository) FindById(id uint) (*models.Users, error) {
 	var user models.Users
 
-	query := "SELECT * password FROM users WHERE id = ?"
+	query := "SELECT id, email, name, role FROM users WHERE id = ?"
 	result := r.DB.Raw(query, id).Scan(&user)
 	if result.Error != nil {
 		return nil, result.Error

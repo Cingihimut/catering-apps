@@ -1,13 +1,11 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/Cingihimut/catering-apps/models"
 	"github.com/Cingihimut/catering-apps/services"
-	"github.com/Cingihimut/catering-apps/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,11 +18,26 @@ func NewProductController(ProductService *services.ProductService) *ProductContr
 		ProductService: ProductService,
 	}
 }
-
 func (c *ProductController) Create(ctx *gin.Context) {
+	role, exists := ctx.Get("role")
+	if !exists || models.EnumRole(role.(string)) != models.RoleOwner {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "Unauthorized: Admin role required",
+		})
+		return
+	}
+
 	var product models.Products
-	priceStr := ctx.PostForm("price")
-	price, err := strconv.ParseFloat(priceStr, 64)
+	if err := ctx.ShouldBind(&product); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	price, err := strconv.ParseFloat(ctx.PostForm("price"), 64)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -32,9 +45,26 @@ func (c *ProductController) Create(ctx *gin.Context) {
 		})
 		return
 	}
-	product.ProductName = ctx.PostForm("product_name")
-	product.Description = ctx.PostForm("description")
 	product.Price = price
+
+	categories := ctx.PostFormArray("categories")
+
+	product.Categories = make([]models.Categories, len(categories))
+
+	for i, categoryIDStr := range categories {
+		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"status":  "error",
+				"message": "Invalid category ID",
+			})
+			return
+		}
+
+		category := models.Categories{ID: uint(categoryID)}
+		product.Categories[i] = category
+	}
+
 	form, err := ctx.MultipartForm()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -51,9 +81,9 @@ func (c *ProductController) Create(ctx *gin.Context) {
 			"status":  "error",
 			"message": err.Error(),
 		})
+		return
 	}
-	fmt.Println(form)
-	fmt.Println(imageURLs)
+
 	createdProduct, err := c.ProductService.Create(&product, imageURLs)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -69,42 +99,18 @@ func (c *ProductController) Create(ctx *gin.Context) {
 	})
 }
 
-func (c *ProductController) GetAll(ctx *gin.Context) {
-	products, err := c.ProductService.GetAllProduct()
+func (c *ProductController) GetAllProducts(ctx *gin.Context) {
+	products, err := c.ProductService.GetAllProducts()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Failed to get product",
+			"message": err.Error(),
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data":   products,
-	})
-}
-
-func (c *ProductController) GetProductBySellerID(ctx *gin.Context) {
-
-	userId := ctx.Param("sellerId")
-	sellerId, err := utils.ParseStrParamsToUint(userId)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Invalid user ID"})
-		return
-	}
-	product, err := c.ProductService.GetProductBySellerID(sellerId)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to parse ID",
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		"data":   product,
 	})
 }
