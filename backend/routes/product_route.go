@@ -8,7 +8,7 @@ import (
 
 func InitProductRoutes(router *gin.Engine, productController *controllers.ProductController) {
 
-	router.GET("/api/products", productController.GetAllProducts)
-	router.POST("/api/products", middlewares.AuthMiddleware(), productController.Create)
+	router.GET("/api/products/", productController.GetAllProducts)
+	router.POST("/api/products/", middlewares.AuthMiddleware(), productController.Create)
 
 }

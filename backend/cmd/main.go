@@ -25,6 +25,9 @@ func main() {
 	config.AllowHeaders = []string{"*"}
 	appConfig.App.Use(cors.New(config))
 
+	// Serve Images
+	appConfig.App.Static("/uploads/", "./uploads")
+
 	// user route
 	userRepository := repositories.NewUserRepository(appConfig.DB)
 	userService := services.NewUserService(*userRepository)

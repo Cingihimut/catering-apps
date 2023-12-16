@@ -8,6 +8,7 @@ import (
 	"github.com/Cingihimut/catering-apps/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func InitDB() (*gorm.DB, error) {
@@ -19,7 +20,9 @@ func InitDB() (*gorm.DB, error) {
 		os.Getenv("DB_PORT"),
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		log.Fatal(err)
 		return nil, fmt.Errorf("failed to connect to database: %v", err)
@@ -31,6 +34,7 @@ func InitDB() (*gorm.DB, error) {
 	migrator.CreateTable(&models.Address{})
 	migrator.CreateTable(&models.Categories{})
 	migrator.CreateTable(&models.Products{})
+	migrator.CreateTable(&models.ProductCategories{})
 	migrator.CreateTable(&models.ProductImages{})
 	migrator.CreateTable(&models.CartItem{})
 	migrator.CreateTable(&models.Cart{})

@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Cingihimut/catering-apps/models"
+	"github.com/Cingihimut/catering-apps/models/converter"
 	"gorm.io/gorm"
 )
 
@@ -62,16 +63,6 @@ func (c *ProductRepository) SaveImage(tx *gorm.DB, productImages *models.Product
 	return productImages, nil
 }
 
-func (c *ProductRepository) GetAllProductFromDB() ([]models.Products, error) {
-	var products []models.Products
-	result := c.DB.Raw("SELECT * FROM products").Scan(&products)
-	fmt.Println(result)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return products, nil
-}
-
 func (c *ProductRepository) LoadImages(product *models.Products) {
 	query := "SELECT * FROM product_images WHERE product_id = ?"
 	result := c.DB.Raw(query, product.ID).Scan(&product.Images)
@@ -91,14 +82,41 @@ func (r *ProductRepository) GetProductByID(productID uint) (*models.Products, er
 	}
 	return &product, nil
 }
+func (r *ProductRepository) GetAllProducts() ([]converter.AllProductsResponse, error) {
+	query := `
+        SELECT
+            p.*,
+            COALESCE(STRING_AGG(DISTINCT c.name, ', '), '') AS categories,
+            COALESCE(STRING_AGG(DISTINCT pi.image_url, ', '), '') AS images
+        FROM
+            products p
+        LEFT JOIN
+            product_categories pc ON p.id = pc.product_id
+        LEFT JOIN
+            categories c ON pc.category_id = c.id
+        LEFT JOIN
+            product_images pi ON p.id = pi.product_id
+        GROUP BY
+            p.id, p.product_name;
+    `
 
-func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
-	var products []models.Products
-
-	query := "SELECT * FROM products"
-	if err := r.DB.Raw(query).Find(&products).Error; err != nil {
+	var productsWithDetails []converter.AllProductsResponse
+	rows, err := r.DB.Raw(query).Rows()
+	if err != nil {
+		fmt.Println("Error:", err)
 		return nil, err
 	}
+	defer rows.Close()
 
-	return products, nil
+	for rows.Next() {
+		var productDetails converter.AllProductsResponse
+		err := r.DB.ScanRows(rows, &productDetails)
+		if err != nil {
+			fmt.Println("Error scanning row:", err)
+			return nil, err
+		}
+		productsWithDetails = append(productsWithDetails, productDetails)
+	}
+
+	return productsWithDetails, nil
 }

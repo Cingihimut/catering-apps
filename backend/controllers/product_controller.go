@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -36,6 +38,16 @@ func (c *ProductController) Create(ctx *gin.Context) {
 		})
 		return
 	}
+	log.Printf("Form Data: %v", ctx.Request.PostForm)
+
+	log.Printf("Product Name : %v", ctx.PostForm("product_name"))
+	log.Printf("Description : %v", ctx.PostForm("description"))
+	log.Printf("Product : %v", product)
+	fmt.Printf("Product ID: %d\n", product.ID)
+	fmt.Printf("Product Name: %s\n", product.ProductName)
+	fmt.Printf("Description: %s\n", product.Description)
+	fmt.Printf("Price: %f\n", product.Price)
+	// ... cetak field lainnya
 
 	price, err := strconv.ParseFloat(ctx.PostForm("price"), 64)
 	if err != nil {
