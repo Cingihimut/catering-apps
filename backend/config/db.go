@@ -11,7 +11,7 @@ import (
 )
 
 func InitDB() (*gorm.DB, error) {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%s",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%s TimeZone=Asia/Jakarta",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -25,10 +25,16 @@ func InitDB() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to connect to database: %v", err)
 	}
 
-	if err := db.AutoMigrate(&models.Users{}, &models.Sellers{}, &models.Address{}, &models.Sellers{}, &models.Caterings{}, &models.CateringImages{}); err != nil {
-		log.Fatal(err)
-		return nil, fmt.Errorf("failed to migrate database: %v", err)
-	}
+	migrator := db.Migrator()
+
+	migrator.CreateTable(&models.Users{})
+	migrator.CreateTable(&models.Address{})
+	migrator.CreateTable(&models.Categories{})
+	migrator.CreateTable(&models.Products{})
+	migrator.CreateTable(&models.ProductImages{})
+	migrator.CreateTable(&models.CartItem{})
+	migrator.CreateTable(&models.Cart{})
+	migrator.CreateTable(&models.Transactions{})
 
 	return db, nil
 }

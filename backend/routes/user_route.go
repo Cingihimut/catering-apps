@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitUserRoutes(r *gin.Engine, userController *controllers.UserController) {
+func InitUserRoutes(router *gin.Engine, uc *controllers.UserController) {
 
-	r.GET("/", userController.Create)
+	router.POST("/api/users/register", uc.Register)
+	router.POST("/api/users/login", uc.Login)
 }

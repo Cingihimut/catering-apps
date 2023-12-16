@@ -20,29 +20,16 @@ func main() {
 
 	// Allow CORS
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"} 
+	config.AllowOrigins = []string{"*"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"*"}
 	appConfig.App.Use(cors.New(config))
-	
-	
-	// seller route
-	sellerRepository := repositories.NewSellerRepository(appConfig.DB)
-	sellerService := services.NewSellerService(*sellerRepository)
-	sellerController := controllers.NewSellerController(sellerService)
-	routes.InitSellerRoutes(appConfig.App, sellerController)
 
 	// user route
 	userRepository := repositories.NewUserRepository(appConfig.DB)
 	userService := services.NewUserService(*userRepository)
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
-
-	// catering route
-	cateringRepository := repositories.NewCateringRepository(appConfig.DB)
-	cateringService := services.NewCateringService(*cateringRepository)
-	cateringController := controllers.NewCateringController(cateringService)
-	routes.InitCateringRoutes(appConfig.App, cateringController)
 
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)

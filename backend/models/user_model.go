@@ -6,15 +6,23 @@ import (
 	"gorm.io/gorm"
 )
 
+type EnumRole string
+
+const (
+	RoleUser  EnumRole = "User"
+	RoleOwner EnumRole = "Owner"
+)
+
 type Users struct {
-	ID          uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Email       string `gorm:"type:varchar(100);uniqueIndex" json:"email"`
-	UserName    string `gorm:"type:varchar(255)" json:"username"`
-	Password    string `gorm:"type:varchar(255)" json:"password"`
-	Privilege   string `gorm:"type:varchar(50)" json:"privilege"`
-	UserPicture string `gorm:"type:varchar(255)" json:"user_picture"`
-	UserBanner  string `gorm:"type:varchar(255)" json:"user_banner"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	ID          uint           `gorm:"primaryKey;autoIncrement" json:"id"`
+	Email       string         `gorm:"type:varchar(100);uniqueIndex;not null" json:"email"`
+	Name        string         `gorm:"type:varchar(255);not null" json:"name"`
+	Password    string         `gorm:"type:varchar(255);not null" json:"password"`
+	Role        EnumRole       `gorm:"not null" json:"role"`
+	Picture     string         `gorm:"type:varchar(255)" json:"picture"`
+	PhoneNumber string         `gorm:"type:varchar(255)" json:"phone_number"`
+	Address     []Address      `gorm:"foreignKey:UserID" json:"adresses"`
+	CreatedAt   time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt   time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" `
 }

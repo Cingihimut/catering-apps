@@ -34,7 +34,7 @@ func LoadAppConfig() *AppConfig{
 	}
 
 	app := gin.Default()
-
+	
 	db, err := InitDB()
 	if err != nil {
 		panic(err)

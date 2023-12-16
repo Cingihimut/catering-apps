@@ -19,9 +19,8 @@ func NewUserController(UserService *services.UserService) *UserController {
 	}
 }
 
-func (u *UserController) Create(ctx *gin.Context) {
+func (c *UserController) Register(ctx *gin.Context) {
 	var user models.Users
-
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
@@ -30,7 +29,7 @@ func (u *UserController) Create(ctx *gin.Context) {
 		return
 	}
 
-	createdUser, err := u.UserService.CreateUser(&user)
+	createdUser, err := c.UserService.CreateUser(&user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -46,7 +45,7 @@ func (u *UserController) Create(ctx *gin.Context) {
 	})
 }
 
-func (u *UserController) Login(ctx *gin.Context) {
+func (c *UserController) Login(ctx *gin.Context) {
 	var user models.Users
 
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -57,29 +56,16 @@ func (u *UserController) Login(ctx *gin.Context) {
 		return
 	}
 
-	existingUser, err := u.UserService.LoginUser(user.Email)
+	token, err := c.UserService.LoginUser(&user)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status":  "error",
 			"message": err.Error(),
 		})
 		return
 	}
-	if existingUser.Password != user.Password {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"status":  "error",
-			"message": "Invalid password",
-		})
-		return
-	}
 
-	token, err := u.UserService.GenerateToken(existingUser)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-		return
-	}
-
-	ctx.JSON(http.StatusCreated, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"token":  token,
 	})

@@ -11,52 +11,42 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CateringController struct {
-	CateringService *services.CateringService
+type ProductController struct {
+	ProductService *services.ProductService
 }
 
-
-func NewCateringController(CateringService *services.CateringService) *CateringController {
-	return &CateringController{
-		CateringService: CateringService,
+func NewProductController(ProductService *services.ProductService) *ProductController {
+	return &ProductController{
+		ProductService: ProductService,
 	}
 }
 
-func (c *CateringController) Create(ctx *gin.Context) {
-	var catering models.Caterings
-	sellerId, exist := ctx.Get("id")
-	if !exist{
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Seller Id not found",
-		})
-        return
-	}
+func (c *ProductController) Create(ctx *gin.Context) {
+	var product models.Products
 	priceStr := ctx.PostForm("price")
 	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),
 		})
-		return 
+		return
 	}
-	catering.SellerID  = sellerId.(uint)
-	catering.CateringName = ctx.PostForm("catering_name")
-	catering.Description = ctx.PostForm("description")
-	catering.Price = price
+	product.ProductName = ctx.PostForm("product_name")
+	product.Description = ctx.PostForm("description")
+	product.Price = price
 	form, err := ctx.MultipartForm()
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),
 		})
-		return 
+		return
 	}
 
 	files := form.File["images"]
-	imageURLs, err := c.CateringService.SaveImages(files)
-	if err != nil{
+	imageURLs, err := c.ProductService.SaveImages(files)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -64,7 +54,7 @@ func (c *CateringController) Create(ctx *gin.Context) {
 	}
 	fmt.Println(form)
 	fmt.Println(imageURLs)
-	createdCatering, err := c.CateringService.Create(&catering, imageURLs)
+	createdProduct, err := c.ProductService.Create(&product, imageURLs)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -75,36 +65,36 @@ func (c *CateringController) Create(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"status": "success",
-		"data":   createdCatering,
+		"data":   createdProduct,
 	})
 }
 
-func (c *CateringController) GetAll(ctx *gin.Context) {
-	caterings, err := c.CateringService.GetAllCatering()
+func (c *ProductController) GetAll(ctx *gin.Context) {
+	products, err := c.ProductService.GetAllProduct()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Failed to get catering",
+			"message": "Failed to get product",
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   caterings,
+		"data":   products,
 	})
 }
 
-func (c *CateringController) GetCateringBySellerID(ctx *gin.Context) {
+func (c *ProductController) GetProductBySellerID(ctx *gin.Context) {
 
 	userId := ctx.Param("sellerId")
 	sellerId, err := utils.ParseStrParamsToUint(userId)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
-			"message":  "Invalid user ID"})
+			"message": "Invalid user ID"})
 		return
 	}
-	catering, err := c.CateringService.GetCateringBySellerID(sellerId)
+	product, err := c.ProductService.GetProductBySellerID(sellerId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -115,6 +105,6 @@ func (c *CateringController) GetCateringBySellerID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   catering,
+		"data":   product,
 	})
 }

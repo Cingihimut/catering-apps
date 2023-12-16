@@ -18,7 +18,7 @@ func ConvertToUserResponse(user *models.Users) *UserResponse {
 	return &UserResponse{
 		ID:        user.ID,
 		Email:     user.Email,
-		Username:  user.UserName,
+		Username:  user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
