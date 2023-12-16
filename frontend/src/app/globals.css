@@ -16,3 +16,9 @@
     animation:s4 0.5s infinite steps(10);
   }
   @keyframes s4 {to{transform: rotate(1turn)}}
+  .text-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }

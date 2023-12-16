@@ -19,7 +19,11 @@ func main() {
 	appConfig := config.LoadAppConfig()
 
 	// Allow CORS
-	appConfig.App.Use(cors.Default())
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"} 
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"*"}
+	appConfig.App.Use(cors.New(config))
 	
 	
 	// seller route

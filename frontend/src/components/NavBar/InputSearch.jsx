@@ -27,7 +27,7 @@ const InputSearch = () => {
       <input
         id="btn"
         name="btn"
-        placeholder=" cari disini"
+        placeholder="cari disini"
         className="w-full p-2 rounded border border-sky-500"
         ref={searchRef}
         onKeyDown={handleKeyDown}
