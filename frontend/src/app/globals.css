@@ -79,6 +79,41 @@ a {
   padding-left: 140px;
   padding-right: 140px;
 }
+.span {
+  color: #d5de17;
+}
+
+.color {
+  color: #74d600;
+}
+.bg-color {
+  background-color: #74d600;
+}
+
+.kuningb {
+  background-color: #d5de17;
+}
+.spanred {
+  color: #ff0000;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  @apply block w-full my-2 rounded-xl;
+  @apply border p-2 border-gray-300 bg-gray-100;
+}
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="text"]:disabled {
+  @apply bg-gray-300 cursor-not-allowed;
+}
+
+button {
+  @apply block w-full text-gray-500 font-semibold;
+  @apply rounded-xl px-6 py-2;
+}
+
 
 @media screen and (max-width: 1536px) {
   .wrapper {
