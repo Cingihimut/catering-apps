@@ -5,8 +5,8 @@ export default function Menu() {
   let test = [1, 2, 3, 4, 5, 6];
   return (
     <section>
-       <div className="absolute left-0 right-0 w-full justify-start">
-        <div className="h-48 w-48 absolute -top-24 -left-12 text-left -z-10">
+      <div className="absolute left-0  right-0 w-full justify-start">
+        <div className="h-48 w-48 absolute -top-[180px]  -left-12 text-left -z-10">
           <Image
             src={"/selada-kiri.png"}
             layout={"fill"}

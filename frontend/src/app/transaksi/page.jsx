@@ -38,7 +38,11 @@ const TransactionForm = ({ selectedMenuItem }) => {
     <div>
       <div>
         <label>Alamat:</label>
-        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
       </div>
       <div>
         <label>Tanggal:</label>
@@ -58,7 +62,10 @@ const TransactionForm = ({ selectedMenuItem }) => {
         <input type="number" value={quantity} onChange={handleQuantityChange} />
       </div>
 
-      <button className="max-w-xs mx-auto bg-blue-500 mt-24 text-white" onClick={handleOrderNow}>
+      <button
+        className="max-w-xs mx-auto bg-blue-500 mt-24 my-24  text-white"
+        onClick={handleOrderNow}
+      >
         Pesan Sekarang
       </button>
     </div>
