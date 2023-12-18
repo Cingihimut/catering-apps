@@ -45,6 +45,31 @@ func (c *UserController) Register(ctx *gin.Context) {
 	})
 }
 
+func (c *UserController) RegisterOwner(ctx *gin.Context) {
+	var user models.Users
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	createdUser, err := c.UserService.CreateOwner(&user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	userResponse := converter.ConvertToUserResponse(createdUser)
+	ctx.JSON(http.StatusCreated, gin.H{
+		"status": "success",
+		"data":   userResponse,
+	})
+}
 func (c *UserController) Login(ctx *gin.Context) {
 	var user models.Users
 

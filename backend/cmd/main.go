@@ -31,6 +31,12 @@ func main() {
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
 
+	// product route
+	productRepository := repositories.NewProductRepository(appConfig.DB)
+	productService := services.NewProductService(*productRepository)
+	productController := controllers.NewProductController(productService)
+	routes.InitProductRoutes(appConfig.App, productController)
+
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)

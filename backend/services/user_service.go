@@ -29,6 +29,25 @@ func (u *UserService) CreateUser(user *models.Users) (*models.Users, error) {
 	}
 	user.Role = models.RoleUser
 	user.Password = hashedPassword
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+	createdUser, err := u.UserRepository.Create(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return createdUser, nil
+}
+func (u *UserService) CreateOwner(user *models.Users) (*models.Users, error) {
+
+	hashedPassword, err := u.hashPassword(user.Password)
+	if err != nil {
+		return nil, err
+	}
+	user.Role = models.RoleOwner
+	user.Password = hashedPassword
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
 	createdUser, err := u.UserRepository.Create(user)
 	if err != nil {
 		return nil, err

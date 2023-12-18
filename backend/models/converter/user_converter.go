@@ -7,7 +7,6 @@ import (
 )
 
 type UserResponse struct {
-	ID        uint      `json:"id"`
 	Email     string    `json:"email"`
 	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"created_at"`
@@ -16,7 +15,6 @@ type UserResponse struct {
 
 func ConvertToUserResponse(user *models.Users) *UserResponse {
 	return &UserResponse{
-		ID:        user.ID,
 		Email:     user.Email,
 		Username:  user.Name,
 		CreatedAt: user.CreatedAt,
