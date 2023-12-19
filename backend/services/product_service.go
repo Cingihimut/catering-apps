@@ -4,7 +4,6 @@ import (
 	"mime/multipart"
 
 	"github.com/Cingihimut/catering-apps/models"
-	"github.com/Cingihimut/catering-apps/models/converter"
 	"github.com/Cingihimut/catering-apps/repositories"
 	"github.com/Cingihimut/catering-apps/utils"
 )
@@ -70,6 +69,6 @@ func (s *ProductService) SaveImages(files []*multipart.FileHeader) ([]string, er
 	return imageURLs, nil
 }
 
-func (s *ProductService) GetAllProducts() ([]converter.AllProductsResponse, error) {
+func (s *ProductService) GetAllProducts() ([]models.Products, error) {
 	return s.ProductRepository.GetAllProducts()
 }

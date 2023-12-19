@@ -1,10 +1,3 @@
-package models
-
-import (
-	"time"
-
-	"gorm.io/gorm"
-)
 
 type Products struct {
 	ID          uint            `gorm:"primaryKey;autoIncrement" json:"id"`
@@ -18,3 +11,16 @@ type Products struct {
 	DeletedAt   gorm.DeletedAt  `gorm:"index" json:"-"`
 }
 
+type ProductCategories struct {
+	ProductID  uint 
+	CategoryID uint 
+}
+
+type Categories struct {
+	ID        uint           `gorm:"primaryKey;autoIncrement" json:"id"`
+	Name      string         `gorm:"type:varchar(255)" json:"name"`
+	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	Products  []Products     `gorm:"many2many:product_categories" json:"products"`
+}

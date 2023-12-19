@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 
 	"github.com/Cingihimut/catering-apps/models"
@@ -40,5 +41,66 @@ func InitDB() (*gorm.DB, error) {
 	migrator.CreateTable(&models.Cart{})
 	migrator.CreateTable(&models.Transactions{})
 
+	seedDummyData(db)
 	return db, nil
+}
+
+func seedDummyData(db *gorm.DB) {
+	// Seed kategori
+	categories := []models.Categories{
+		{ID: 1, Name: "Electronics"},
+		{ID: 2, Name: "Clothing"},
+		// Tambahkan kategori lainnya sesuai kebutuhan
+	}
+
+	for _, category := range categories {
+		if err := db.Create(&category).Error; err != nil {
+			fmt.Println("Error seeding category:", err)
+			return
+		}
+	}
+
+	// Seed produk
+	products := []models.Products{
+		{ProductName: "Laptop", Description: "Powerful laptop", Price: 1200.00},
+		{ProductName: "T-shirt", Description: "Comfortable t-shirt", Price: 20.00},
+		// Tambahkan produk lainnya sesuai kebutuhan
+	}
+
+	for _, product := range products {
+		if err := db.Create(&product).Error; err != nil {
+			fmt.Println("Error seeding product:", err)
+			return
+		}
+
+		// Seed gambar untuk setiap produk
+		for i := 0; i < 3; i++ {
+			image := models.ProductImages{
+				ID:        0,
+				ProductID: product.ID,
+				ImageURL:  "",
+			}
+			if err := db.Create(&image).Error; err != nil {
+				fmt.Println("Error seeding product image:", err)
+				return
+			}
+		}
+
+		// Seed kategori untuk setiap produk
+		for _, category := range categories {
+			// Ada kemungkinan acak produk yang dimiliki oleh beberapa kategori
+			if rand.Intn(2) == 0 {
+				productCategory := models.ProductCategories{
+					ProductID:  product.ID,
+					CategoryID: category.ID,
+				}
+				if err := db.Create(&productCategory).Error; err != nil {
+					fmt.Println("Error seeding product category:", err)
+					return
+				}
+			}
+		}
+	}
+
+	fmt.Println("Seed data successfully.")
 }

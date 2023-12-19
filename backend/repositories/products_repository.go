@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/Cingihimut/catering-apps/models"
-	"github.com/Cingihimut/catering-apps/models/converter"
 	"gorm.io/gorm"
 )
 
@@ -13,9 +12,9 @@ type ProductRepository struct {
 	DB *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) *ProductRepository {
+func NewProductRepository(DB *gorm.DB) *ProductRepository {
 	return &ProductRepository{
-		DB: db,
+		DB: DB,
 	}
 }
 
@@ -72,51 +71,101 @@ func (c *ProductRepository) LoadImages(product *models.Products) {
 	}
 }
 
-func (r *ProductRepository) GetProductByID(productID uint) (*models.Products, error) {
-	var product models.Products
+func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
+	var products []models.Products
 
-	result := r.DB.Raw("SELECT * FROM products WHERE seller_id = ?", productID).Scan(&product)
+	// Eksekusi SQL mentah menggunakan Raw SQL di Gorm
+	rawSQL := `
+		SELECT 
+			p.id,
+			p.product_name,
+			p.description,
+			p.price,
+			p.created_at,
+			p.updated_at,
+			i.id as image_id,
+			i.product_id,
+			i.image_url as image_url
+		FROM 
+			products p
+		LEFT JOIN 
+			product_images i ON p.id = i.product_id
+		ORDER BY 
+			p.id, i.id
+	`
 
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &product, nil
-}
-func (r *ProductRepository) GetAllProducts() ([]converter.AllProductsResponse, error) {
-	query := `
-        SELECT
-            p.*,
-            COALESCE(STRING_AGG(DISTINCT c.name, ', '), '') AS categories,
-            COALESCE(STRING_AGG(DISTINCT pi.image_url, ', '), '') AS images
-        FROM
-            products p
-        LEFT JOIN
-            product_categories pc ON p.id = pc.product_id
-        LEFT JOIN
-            categories c ON pc.category_id = c.id
-        LEFT JOIN
-            product_images pi ON p.id = pi.product_id
-        GROUP BY
-            p.id, p.product_name;
-    `
-
-	var productsWithDetails []converter.AllProductsResponse
-	rows, err := r.DB.Raw(query).Rows()
+	rows, err := r.DB.Raw(rawSQL).Rows()
 	if err != nil {
-		fmt.Println("Error:", err)
 		return nil, err
 	}
 	defer rows.Close()
 
+	log.Printf("Hasil : %v", rows)
+
+	// Map untuk melacak produk yang telah diproses
+	processedProducts := make(map[uint]*models.Products)
+
 	for rows.Next() {
-		var productDetails converter.AllProductsResponse
-		err := r.DB.ScanRows(rows, &productDetails)
+		var product models.Products
+		var image models.ProductImages
+
+		err := rows.Scan(
+			&product.ID, &product.ProductName, &product.Description, &product.Price,
+			&product.CreatedAt, &product.UpdatedAt,
+			&image.ID, &image.ProductID, &image.ImageURL,
+		)
+
 		if err != nil {
-			fmt.Println("Error scanning row:", err)
 			return nil, err
 		}
-		productsWithDetails = append(productsWithDetails, productDetails)
+
+		// Lakukan pengecekan apakah produk sudah diproses atau belum
+		if _, ok := processedProducts[product.ID]; !ok {
+			// Jika belum, tambahkan produk ke slice dan tandai sebagai diproses
+			products = append(products, product)
+			processedProducts[product.ID] = &products[len(products)-1]
+		}
+
+		// Tambahkan gambar ke produk yang sesuai
+		if image.ID != 0 {
+			processedProducts[product.ID].Images = append(processedProducts[product.ID].Images, image)
+		}
 	}
 
-	return productsWithDetails, nil
+	// Ambil kategori untuk setiap produk
+	for i := range products {
+		categories, err := r.getCategoriesForProduct(products[i].ID)
+		if err != nil {
+			return nil, err
+		}
+		products[i].Categories = categories
+	}
+
+	return products, nil
+}
+func (r *ProductRepository) getCategoriesForProduct(productID uint) ([]models.Categories, error) {
+	query := fmt.Sprintf(`
+		SELECT c.id, c.name
+		FROM categories c
+		LEFT JOIN product_categories pc ON c.id = pc.category_id AND pc.product_id = %d
+		WHERE pc.product_id IS NOT NULL OR pc.product_id IS NULL
+	`, productID)
+
+	rows, err := r.DB.Raw(query).Rows()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []models.Categories
+	for rows.Next() {
+		var category models.Categories
+		err := rows.Scan(&category.ID, &category.Name)
+		if err != nil {
+			return nil, err
+		}
+		categories = append(categories, category)
+	}
+
+	return categories, nil
 }
