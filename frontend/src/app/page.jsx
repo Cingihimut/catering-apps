@@ -1,10 +1,13 @@
+<<<<<<< HEAD
 "use client"
 import React, { useEffect } from "react";
+=======
+import Image from "next/image";
+import React from "react";
+>>>>>>> eefea0dac84a030b05e3301099d7b5c7c5bf222f
 import Link from "next/link";
 import Icons from "./component/icons/page";
 import Menu from "./component/menu";
-import Image from "next/image";
-
 
 export default function Home() {
 
@@ -50,12 +53,10 @@ export default function Home() {
         </div>
 
         <div className="w-1/2">
-          <Image
+          <img
             src="/logo.png"
             alt="Makanan Produk"
             className="w-full h-auto rounded-full"
-            width={400}
-            height={200}
           />
         </div>
       </div>
