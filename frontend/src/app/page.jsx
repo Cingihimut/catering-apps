@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 "use client"
 import React, { useEffect } from "react";
-=======
-import Image from "next/image";
-import React from "react";
->>>>>>> eefea0dac84a030b05e3301099d7b5c7c5bf222f
 import Link from "next/link";
 import Icons from "./component/icons/page";
 import Menu from "./component/menu";
@@ -31,7 +26,7 @@ export default function Home() {
       <div className="flex justify-between items-center mt-8">
         <div className="w-1/2 pr-8">
           <h1 className="text-4xl font-bold mb-4">
-            My moms <span className="color">Catering</span> is here
+            Mama arsy <span className="color">Catering</span> is here
           </h1>
           <p className="text-lg">
             It is a long established fact that a reader will be distracted by
