@@ -1,8 +1,9 @@
-import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import Icons from "./component/icons/page";
 import Menu from "./component/menu";
+import Image from "next/image";
+
 
 export default function Home() {
   return (
@@ -32,10 +33,12 @@ export default function Home() {
         </div>
 
         <div className="w-1/2">
-          <img
+          <Image
             src="/logo.png"
             alt="Makanan Produk"
             className="w-full h-auto rounded-full"
+            width={400}
+            height={200}
           />
         </div>
       </div>

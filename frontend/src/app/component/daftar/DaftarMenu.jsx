@@ -9,7 +9,7 @@ export default function DaftarMenu({ name }) {
   };
   return (
     <div
-      className="bg-gray-200 p-4 rounded-lg text-center hover:bg-white transition-all hover:shadow-2xl hover:shadow-black/30"
+      className="bg-gray-200 p-4 rounded-lg text-center hover:bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-black/30"
       key={name}
     >
       <div className="text-center">
@@ -25,7 +25,7 @@ export default function DaftarMenu({ name }) {
         industry.
       </p>
       <button
-        className=" bg-color text-white rounded-full px-6 py-2 mt-4"
+        className=" bg-color bg-color-hover transition-all duration-300 text-white rounded-full px-6 py-2 mt-4"
         onClick={handleAddToCart}
       >
         Add to card $1

@@ -6,7 +6,7 @@ export default function Menu() {
   return (
     <section>
       <div className="absolute left-0  right-0 w-full justify-start">
-        <div className="h-48 w-48 absolute -top-[180px]  -left-12 text-left -z-10">
+        <div className="h-48 w-48 absolute -top-[180px] -left-12 text-left -z-10">
           <Image
             src={"/selada-kiri.png"}
             layout={"fill"}
