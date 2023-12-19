@@ -1,8 +1,13 @@
 "use client";
 import React, { useState } from "react";
+<<<<<<< HEAD
 import "../globals.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+=======
+import { useRouter } from "next/router";
+import "../globals.css";
+>>>>>>> ab68c8cd872d067cf52898ba1c5c1ec294febc57
 
 const Register = () => {
   const router = useRouter();
@@ -33,11 +38,21 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Data respons JSON:", data);
+<<<<<<< HEAD
         router.push("/login");
         console.log(data);
       } else {
         const gagal = await response.json();
         console.log("Data respons JSON:", gagal);
+=======
+        console.log(data);
+        console.log("Registrasi berhasil!");
+        router.push("/login");
+      } else {
+        const gagal = await response.json();
+        console.log("Data respons JSON:", gagal);
+        console.error("Registrasi gagal");
+>>>>>>> ab68c8cd872d067cf52898ba1c5c1ec294febc57
       }
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -83,10 +98,17 @@ const Register = () => {
             />
           </label>
           <p className="text-sm text-gray-600">
+<<<<<<< HEAD
             Already have an account?
             <Link href="/login" className="text-indigo-500 hover:underline">
               Login here
             </Link>
+=======
+            Already have an account?{" "}
+            <a href="/login" className="text-indigo-500 hover:underline">
+              Login here
+            </a>
+>>>>>>> ab68c8cd872d067cf52898ba1c5c1ec294febc57
           </p>
           <button
             type="submit"

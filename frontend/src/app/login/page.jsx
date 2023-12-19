@@ -47,8 +47,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-green-500 to-green-600">
-      <div className="bg-white p-8 rounded-lg shadow-md ">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="bg-gray-100 p-9 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-6">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block">
@@ -78,6 +78,12 @@ const Login = () => {
             <Link href="/register" className="text-blue-500 hover:underline">
               Register here
             </Link>
+          </p>
+          <p className="text-sm text-gray-600">
+            Masuk lewat{" "}
+            <a href="/signin" className="text-blue-500 hover:underline">
+              github?{" "}
+            </a>
           </p>
           <button
             type="submit"
