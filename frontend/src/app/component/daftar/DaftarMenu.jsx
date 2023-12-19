@@ -1,4 +1,5 @@
 "use client";
+import Checkout from "@/components/Checkout";
 import { useState } from "react";
 
 export default function DaftarMenu({ name }) {
@@ -24,12 +25,12 @@ export default function DaftarMenu({ name }) {
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry.
       </p>
-      <button
+      {/* <button
         className=" bg-color bg-color-hover transition-all duration-300 text-white rounded-full px-6 py-2 mt-4"
         onClick={handleAddToCart}
-      >
-        Add to card $1
-      </button>
+      > */}
+        <Checkout/>
+      {/* </button> */}
     </div>
   );
 }

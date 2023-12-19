@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Icons from "./component/icons/page";
 import Menu from "./component/menu";
@@ -6,12 +7,28 @@ import Image from "next/image";
 
 
 export default function Home() {
+
+  useEffect(() => {
+    const snapScrpit = "https://app.sandbox.midtrans.com/snap/snap.js"
+    const clientKey  = process.env.NEXT_PUBLIC_CLIENT
+    const script = document.createElement('script')
+    script.src = snapScrpit
+    script.setAttribute('data-client-key', clientKey)
+    script.async = true
+
+    document.body.appendChild(script)
+    return() => {
+      document.body.removeChild(script)
+    }
+
+  }, []);
+
   return (
     <section>
       <div className="flex justify-between items-center mt-8">
         <div className="w-1/2 pr-8">
           <h1 className="text-4xl font-bold mb-4">
-            Imam'S <span className="color">Catering</span> is here
+            My moms <span className="color">Catering</span> is here
           </h1>
           <p className="text-lg">
             It is a long established fact that a reader will be distracted by
