@@ -14,7 +14,7 @@ export async function POST(request){
         item_details: {
             name: productName,
             price: price,
-            quantity: quantity
+            quantity: quantity,
         },
         transaction_details: {
             order_id: id,

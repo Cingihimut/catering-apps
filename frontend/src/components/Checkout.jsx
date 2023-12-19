@@ -21,10 +21,10 @@ const Checkout = () => {
       method: "POST",
       body: JSON.stringify(data)
     })
-    const requestData = await response.json()
-    window.snap.pay(requestData.token)
-    // console.log(requestData);
 
+    const requestData = await response.json()
+    // console.log({ requestData });
+    window.snap.pay(requestData.token)
   };
 
   return (
