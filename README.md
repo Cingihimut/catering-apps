@@ -21,7 +21,7 @@ A web app for handling food catering orders
 - Midtrans https://docs.midtrans.com/reference/quick-start-1
 
 ## 📱 Feature
-- Adopted E-commerce feature
+- Adopted C-R-U-D E-commerce feature
 
 ## 🔌 API Requirement
 - Adopted E-commerce API Requirement
