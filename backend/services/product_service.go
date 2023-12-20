@@ -17,11 +17,21 @@ func NewProductService(ProductRepository repositories.ProductRepository) *Produc
 		ProductRepository: ProductRepository,
 	}
 }
+func (p *ProductService) Create(product *models.Products, imageURLs []string) (*models.Products, error) {
+	tx := p.ProductRepository.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 
-func (s *ProductService) Create(product *models.Products, imageURLs []string) (*models.Products, error) {
-	tx := s.ProductRepository.DB.Begin()
-	createdProduct, err := s.ProductRepository.Create(tx, product)
+	createdProduct, err := p.ProductRepository.Create(tx, product)
 	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := p.ProductRepository.SaveCategories(tx, createdProduct.ID, product.Categories); err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -32,13 +42,13 @@ func (s *ProductService) Create(product *models.Products, imageURLs []string) (*
 			ImageURL:  imageURL,
 		}
 
-		if _, err := s.ProductRepository.SaveImage(tx, &productImage); err != nil {
+		if _, err := p.ProductRepository.SaveImage(tx, &productImage); err != nil {
 			tx.Rollback()
 			return nil, err
 		}
 		createdProduct.Images = append(createdProduct.Images, productImage)
-
 	}
+
 	tx.Commit()
 
 	return createdProduct, nil
@@ -59,23 +69,61 @@ func (s *ProductService) SaveImages(files []*multipart.FileHeader) ([]string, er
 	return imageURLs, nil
 }
 
-func (s *ProductService) GetAllProduct() ([]models.Products, error) {
-	products, err := s.ProductRepository.GetAllProductFromDB()
+func (p *ProductService) Update(product *models.Products, imageURLs []string) (*models.Products, error) {
+	tx := p.ProductRepository.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	
+	updatedProduct, err := p.ProductRepository.Update(tx, product)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
-	for i := range products {
-		s.ProductRepository.LoadImages(&products[i])
+	if err := p.ProductRepository.SaveCategories(tx, updatedProduct.ID, product.Categories); err != nil {
+		tx.Rollback()
+		return nil, err
 	}
 
-	return products, nil
+	// Hapus semua gambar produk lama sebelum menyimpan gambar yang baru
+	if err := p.ProductRepository.DeleteImages(tx, updatedProduct.ID); err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	for _, imageURL := range imageURLs {
+		productImage := models.ProductImages{
+			ProductID: updatedProduct.ID,
+			ImageURL:  imageURL,
+		}
+
+		if _, err := p.ProductRepository.SaveImage(tx, &productImage); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		updatedProduct.Images = append(updatedProduct.Images, productImage)
+	}
+
+	tx.Commit()
+
+	return updatedProduct, nil
 }
 
-func (s *ProductService) GetProductBySellerID(productID uint) (*models.Products, error) {
-	product, err := s.ProductRepository.GetProductByID(productID)
-	if err != nil {
-		return nil, err
-	}
-	return product, nil
+
+
+func (s *ProductService) Delete(productID uint) error {
+	if err := s.ProductRepository.DeleteImagesByProductID(productID); err != nil {
+        return err
+    }
+
+    // Menghapus produk
+    return s.ProductRepository.Delete(productID)
+}
+
+
+func (s *ProductService) GetAllProducts() ([]models.Products, error) {
+	return s.ProductRepository.GetAllProductsFromViews()
 }

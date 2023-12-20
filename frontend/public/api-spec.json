@@ -1,0 +1,164 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Catering App API",
+    "description": "Endpoint Format Request Dan Responsenya",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Server lokal"
+    }
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "Mendapatkan semua catering",
+        "responses": {
+          "200": {
+            "description": "Sukses",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": [
+                    {
+                      "id": 1,
+                      "seller_id": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Membuat catering baru",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Catering berhasil dibuat",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "id": 1,
+                    "seller_id": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product": {
+      "post": {
+        "summary": "Create a new product",
+        "description": "Endpoint untuk membuat produk baru",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string",
+                    "description": "Name of the product"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the product"
+                  },
+                  "price": {
+                    "type": "number",
+                    "description": "Price of the product"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary",
+                      "description": "Product images"
+                    },
+                    "description": "Array of product images"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "description": "Category ID"
+                    },
+                    "description": "Array of category IDs"
+                  }
+                },
+                "required": [
+                  "product_name",
+                  "description",
+                  "price",
+                  "images",
+                  "categories"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "id": 1,
+                    "product_name": "Nama Produk",
+                    "description": "Deskripsi Produk",
+                    "price": 100.5,
+                    "images": ["image_url_1", "image_url_2"],
+                    "categories": [1, 2, 3],
+                    "created_at": "2023-01-01T12:00:00Z",
+                    "updated_at": "2023-01-01T12:30:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Admin role required"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "components": {
+          "securitySchemes": {
+            "bearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        }
+      }
+    }
+  }
+}

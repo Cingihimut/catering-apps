@@ -11,5 +11,6 @@ type Categories struct {
 	Name      string         `gorm:"type:varchar(255)" json:"name"`
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" `
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	Products  []Products     `gorm:"many2many:product_categories" json:"products"`
 }

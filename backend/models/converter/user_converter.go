@@ -8,7 +8,7 @@ import (
 
 type UserResponse struct {
 	Email     string    `json:"email"`
-	Username  string    `json:"username"`
+	Name  string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -16,7 +16,7 @@ type UserResponse struct {
 func ConvertToUserResponse(user *models.Users) *UserResponse {
 	return &UserResponse{
 		Email:     user.Email,
-		Username:  user.Name,
+		Name:  user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}

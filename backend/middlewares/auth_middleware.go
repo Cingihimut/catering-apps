@@ -71,8 +71,18 @@ func AuthMiddleware() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		ctx.Set("id", uint(userId))
+		role, ok := claims["role"].(string)
+		if !ok {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "Failed to parse user role",
+			})
+			ctx.Abort()
+			return
+		}
 
+		ctx.Set("id", uint(userId))
+		ctx.Set("role", role)
 		ctx.Next()
 	}
 }

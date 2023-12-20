@@ -38,6 +38,7 @@ func (u *UserService) CreateUser(user *models.Users) (*models.Users, error) {
 
 	return createdUser, nil
 }
+
 func (u *UserService) CreateOwner(user *models.Users) (*models.Users, error) {
 
 	hashedPassword, err := u.hashPassword(user.Password)
@@ -52,7 +53,6 @@ func (u *UserService) CreateOwner(user *models.Users) (*models.Users, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return createdUser, nil
 }
 
@@ -72,13 +72,26 @@ func (u *UserService) LoginUser(user *models.Users) (string, error) {
 
 	return token, nil
 }
+func (u *UserService) VerifyOwner(id uint) (bool, error) {
+	user, err := u.UserRepository.FindById(id)
+	if err != nil {
+		return false, err
+	}
+
+	if user.Role != models.RoleOwner {
+		return false, errors.New("Not Owner")
+	}
+
+	return true, nil
+}
 
 func (u *UserService) GenerateToken(user *models.Users) (string, error) {
 	claims := jwt.MapClaims{
-		"id":       user.ID,
-		"email":    user.Email,
-		"username": user.Name,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"id":    user.ID,
+		"email": user.Email,
+		"name":  user.Name,
+		"role":  user.Role,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
