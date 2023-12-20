@@ -10,5 +10,7 @@ func InitProductRoutes(router *gin.Engine, productController *controllers.Produc
 
 	router.GET("/api/products", productController.GetAllProducts)
 	router.POST("/api/products", middlewares.AuthMiddleware(), productController.Create)
+	router.PUT("/api/products/:id", middlewares.AuthMiddleware(), productController.Update)
+	router.DELETE("/api/products/:id", middlewares.AuthMiddleware(), productController.Delete)
 
 }

@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/Cingihimut/catering-apps/models"
 	"github.com/Cingihimut/catering-apps/services"
+	"github.com/Cingihimut/catering-apps/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +31,7 @@ func (c *ProductController) Create(ctx *gin.Context) {
 	}
 
 	var product models.Products
+
 	if err := ctx.ShouldBind(&product); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
@@ -39,14 +40,6 @@ func (c *ProductController) Create(ctx *gin.Context) {
 		return
 	}
 	log.Printf("Form Data: %v", ctx.Request.PostForm)
-
-	log.Printf("Product Name : %v", ctx.PostForm("product_name"))
-	log.Printf("Description : %v", ctx.PostForm("description"))
-	log.Printf("Product : %v", product)
-	fmt.Printf("Product ID: %d\n", product.ID)
-	fmt.Printf("Product Name: %s\n", product.ProductName)
-	fmt.Printf("Description: %s\n", product.Description)
-	fmt.Printf("Price: %f\n", product.Price)
 
 	price, err := strconv.ParseFloat(ctx.PostForm("price"), 64)
 	if err != nil {
@@ -57,7 +50,6 @@ func (c *ProductController) Create(ctx *gin.Context) {
 		return
 	}
 	product.Price = price
-
 	categories := ctx.PostFormArray("categories")
 
 	product.Categories = make([]models.Categories, len(categories))
@@ -110,6 +102,121 @@ func (c *ProductController) Create(ctx *gin.Context) {
 	})
 }
 
+func (c *ProductController) Update(ctx *gin.Context) {
+	role, exists := ctx.Get("role")
+	if !exists || models.EnumRole(role.(string)) != models.RoleOwner {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "Unauthorized: Admin role required",
+		})
+		return
+	}
+
+	productIDStr := ctx.Param("id")
+	productID, err := strconv.ParseUint(productIDStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid product ID",
+		})
+		return
+	}
+
+	var updatedProduct *models.Products
+	if err := ctx.ShouldBind(&updatedProduct); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	updatedProduct.ID = uint(productID)
+
+	categories := ctx.PostFormArray("categories")
+
+	updatedProduct.Categories = make([]models.Categories, len(categories))
+
+	for i, categoryIDStr := range categories {
+		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"status":  "error",
+				"message": "Invalid category ID",
+			})
+			return
+		}
+
+		category := models.Categories{ID: uint(categoryID)}
+		updatedProduct.Categories[i] = category
+	}
+
+	form, err := ctx.MultipartForm()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	files := form.File["images"]
+	imageURLs, err := c.ProductService.SaveImages(files)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	updatedProduct, err = c.ProductService.Update(updatedProduct, imageURLs)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   updatedProduct,
+	})
+}
+
+func (c *ProductController) Delete(ctx *gin.Context) {
+	role, exists := ctx.Get("role")
+	if !exists || models.EnumRole(role.(string)) != models.RoleOwner {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "Unauthorized: Admin role required",
+		})
+		return
+	}
+	productIDStr := ctx.Param("id")
+	productID, err := utils.ParseStrParamsToUint(productIDStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid product ID",
+		})
+		return
+	}
+	err = c.ProductService.Delete(productID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Product deleted successfully",
+	})
+}
 func (c *ProductController) GetAllProducts(ctx *gin.Context) {
 	products, err := c.ProductService.GetAllProducts()
 	if err != nil {

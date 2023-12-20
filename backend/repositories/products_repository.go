@@ -1,8 +1,10 @@
 package repositories
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/Cingihimut/catering-apps/models"
 	"gorm.io/gorm"
@@ -19,8 +21,10 @@ func NewProductRepository(DB *gorm.DB) *ProductRepository {
 }
 
 func (c *ProductRepository) Create(tx *gorm.DB, product *models.Products) (*models.Products, error) {
-	query := "INSERT INTO products (product_name, description, price) VALUES (?, ?, ?) RETURNING id"
-	result := tx.Raw(query, product.ProductName, product.Description, product.Price).Row()
+	product.CreatedAt = time.Now()
+	product.UpdatedAt = time.Now()
+	query := "INSERT INTO products (product_name, description, price, created_at, updated_at) VALUES (?, ?, ?, ?, ?) RETURNING id"
+	result := tx.Raw(query, product.ProductName, product.Description, product.Price, product.CreatedAt, product.UpdatedAt).Row()
 
 	if result.Err() != nil {
 		return nil, result.Err()
@@ -74,7 +78,6 @@ func (c *ProductRepository) LoadImages(product *models.Products) {
 func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 	var products []models.Products
 
-	// Eksekusi SQL mentah menggunakan Raw SQL di Gorm
 	rawSQL := `
 		SELECT 
 			p.id,
@@ -102,7 +105,6 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 
 	log.Printf("Hasil : %v", rows)
 
-	// Map untuk melacak produk yang telah diproses
 	processedProducts := make(map[uint]*models.Products)
 
 	for rows.Next() {
@@ -119,20 +121,16 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 			return nil, err
 		}
 
-		// Lakukan pengecekan apakah produk sudah diproses atau belum
 		if _, ok := processedProducts[product.ID]; !ok {
-			// Jika belum, tambahkan produk ke slice dan tandai sebagai diproses
 			products = append(products, product)
 			processedProducts[product.ID] = &products[len(products)-1]
 		}
 
-		// Tambahkan gambar ke produk yang sesuai
 		if image.ID != 0 {
 			processedProducts[product.ID].Images = append(processedProducts[product.ID].Images, image)
 		}
 	}
 
-	// Ambil kategori untuk setiap produk
 	for i := range products {
 		categories, err := r.getCategoriesForProduct(products[i].ID)
 		if err != nil {
@@ -143,6 +141,59 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 
 	return products, nil
 }
+
+func (r *ProductRepository) GetAllProductsFromViews() ([]models.Products, error) {
+	var products []models.Products
+
+	rawSQL := `
+        SELECT
+            product_id,
+            product_name,
+            description,
+            price,
+            created_at,
+            updated_at,
+            images,
+            categories
+        FROM
+            all_products_details
+    `
+
+	rows, err := r.DB.Raw(rawSQL).Rows()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var product models.Products
+		var images, categories string
+
+		err := rows.Scan(
+			&product.ID, &product.ProductName, &product.Description, &product.Price,
+			&product.CreatedAt, &product.UpdatedAt, &images, &categories,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal([]byte(images), &product.Images)
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal([]byte(categories), &product.Categories)
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, product)
+	}
+
+	return products, nil
+}
+
 func (r *ProductRepository) getCategoriesForProduct(productID uint) ([]models.Categories, error) {
 	query := fmt.Sprintf(`
 		SELECT c.id, c.name
@@ -168,4 +219,37 @@ func (r *ProductRepository) getCategoriesForProduct(productID uint) ([]models.Ca
 	}
 
 	return categories, nil
+}
+
+func (c *ProductRepository) Update(tx *gorm.DB, product *models.Products) (*models.Products, error) {
+	query := "UPDATE products SET product_name = ?, description = ?, price = ? WHERE id = ? RETURNING *"
+	result := tx.Raw(query, product.ProductName, product.Description, product.Price, product.ID).Scan(product)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return product, nil
+}
+
+func (c *ProductRepository) DeleteImages(tx *gorm.DB, productID uint) error {
+	return tx.Exec("DELETE FROM product_images WHERE product_id = ?", productID).Error
+}
+func (r *ProductRepository) DeleteImagesByProductID(productID uint) error {
+	return r.DB.Exec("DELETE FROM product_images WHERE product_id = ?", productID).Error
+}
+
+func (r *ProductRepository) Delete(productID uint) error {
+	query := "DELETE FROM products WHERE id = ?"
+	result := r.DB.Exec(query, productID)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("Product with ID %d not found", productID)
+	}
+
+	return nil
 }
