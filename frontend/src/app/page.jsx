@@ -18,10 +18,8 @@ const Home = () => {
         setShowScrollButton(shouldShowButton);
       };
 
-      // Menambahkan event listener untuk mendeteksi scroll
       window.addEventListener("scroll", handleScroll);
 
-      // Membersihkan event listener ketika komponen di-unmount
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };

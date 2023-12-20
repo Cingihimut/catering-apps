@@ -1,4 +1,3 @@
-// pages/api/auth/[...nextauth].js
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
@@ -10,7 +9,7 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        const response = await fetch("http://localhost:8080/api/users/login", {
+        const response = await fetch("https://labs.mhdaris.me/api/products/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
