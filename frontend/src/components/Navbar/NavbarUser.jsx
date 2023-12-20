@@ -9,26 +9,13 @@ const DashboardNavbar = () => {
   };
 
   return (
+    <div className="sticky top-0 z-10" style={{ height: "70px" }}>
       <nav className="bg-primary p-4 px-24">
         <div className=" mx-auto flex items-center justify-between">
           <div className="div">
             <a href="#" className="text-white text-lg font-semibold">
-              Owner Dashboard
+              User Dashboard
             </a>
-          </div>
-
-          <div>
-            <div className="hidden md:flex space-x-6">
-              <a href="#" className="text-white hover:text-gray-300">
-                Produk
-              </a>
-              <a href="#" className="text-white hover:text-gray-300">
-                Kategori
-              </a>
-              <a href="#" className="text-white hover:text-gray-300">
-                Transaksi
-              </a>
-            </div>
           </div>
           <div>
             {" "}
@@ -80,6 +67,7 @@ const DashboardNavbar = () => {
           </div>
         </div>
       </nav>
+    </div>
   );
 };
 

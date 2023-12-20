@@ -15,7 +15,6 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <div className="container">
           <div className="wrapper">
-            <Navbar />
             {children}
           </div>
           <footer className="border-t p-8 text-center text-gray-500">

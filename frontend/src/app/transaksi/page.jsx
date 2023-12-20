@@ -35,8 +35,9 @@ const TransactionForm = ({ selectedMenuItem }) => {
   }, [selectedMenuItem]);
 
   return (
-    <div>
+    <div className="mt-12">
       <div>
+        <h1 className="font-semibold text-3xl text-center text-gray-400 underline">Yard carts</h1>
         <label>Alamat:</label>
         <input
           type="text"
@@ -66,7 +67,7 @@ const TransactionForm = ({ selectedMenuItem }) => {
         className="max-w-xs mx-auto bg-blue-500 mt-24 my-24  text-white"
         onClick={handleOrderNow}
       >
-        Pesan Sekarang
+        CheckOut
       </button>
     </div>
   );

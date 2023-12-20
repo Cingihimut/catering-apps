@@ -5,12 +5,13 @@ import Link from "next/link";
 import Icons from "./component/icons/page";
 import Menu from "./component/menu";
 import Image from "next/image";
+import Navbar from "./component/navbar";
+
 
 const Home = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
-
     if (typeof window !== "undefined") {
       const handleScroll = () => {
         const shouldShowButton = window.scrollY > 100;
@@ -28,21 +29,19 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    
-    const snapScprit = "https://app.sandbox.midtrans.com/snap/snap.js"
-    const clientKey = process.env.NEXT_PUBLIC_CLIENT
-    const script = document.createElement('script')
-    script.src = snapScprit
-    script.setAttribute('data-client-key', clientKey)
-    script.async = true
+    const snapScprit = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const clientKey = process.env.NEXT_PUBLIC_CLIENT;
+    const script = document.createElement("script");
+    script.src = snapScprit;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
 
-    document.body.appendChild(script)
+    document.body.appendChild(script);
 
-    return() => {
-      document.body.removeChild(script)
-    }
-
-  }, [])
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -50,6 +49,7 @@ const Home = () => {
 
   return (
     <section>
+      <Navbar />
       <div className="flex justify-between items-center mt-8">
         <div className="w-1/2 pr-8">
           <h1 className="text-4xl font-bold mb-4">

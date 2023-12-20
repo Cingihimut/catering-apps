@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 
+const API_URL = process.env.API_URL + "/api/users/register";
+
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,11 +15,12 @@ export default function RegisterPage() {
   async function handleFormSubmit(ev) {
     ev.preventDefault();
     setCreatingUser(true);
-    const response = await fetch(`${process.env.API_UR}/api/users/register`, {
+    const response = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
       headers: { "Content-Type": "application/json" },
     });
+    console.log(process.env);
     if (response.ok) {
       setCreatingUser(false);
       setUserCreated(true);
