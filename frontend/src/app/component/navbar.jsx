@@ -1,12 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-
+import { useUserStore } from "@/stores/userStore";
 export default function Navbar() {
+  const { user, setUser } = useUserStore();
   const [cartCount, setCartCount] = useState(0);
 
   const handleAddToCart = () => {
     setCartCount(cartCount + 1);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
   };
 
   return (
@@ -42,14 +47,29 @@ export default function Navbar() {
           </Link>
         </div>
         <span>{cartCount}</span>
-        <Link href="/login">
-          <button className=" px-4 py-2 rounded">Login</button>
-        </Link>
-        <Link href="/register">
-          <button className="bg-color text-white px-4 py-2 rounded-full">
-            Register
-          </button>
-        </Link>
+        {!user?.name ? (
+          <>
+            <Link href="/login">
+              <button className=" px-4 py-2 rounded">Login</button>
+            </Link>
+            <Link href="/register">
+              <button className="bg-color text-white px-4 py-2 rounded-full">
+                Register
+              </button>
+            </Link>{" "}
+          </>
+        ) : (
+          <>
+            <Link href="/user">
+              <button className=" bg-color text-white px-4 py-2 rounded-full ">
+                Dashboard
+              </button>
+            </Link>
+            <button className="px-4 py-2 rounded" onClick={handleLogout}>
+              Log out
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );

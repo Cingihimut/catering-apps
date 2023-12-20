@@ -1,11 +1,18 @@
 "use client";
 import React, { useState } from "react";
-
+import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "next/navigation";
 const DashboardNavbar = () => {
+  const { user, setUser } = useUserStore();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  const handleLogout = () => {
+    setUser(null);
+    router.push("/");
   };
 
   return (
@@ -19,9 +26,12 @@ const DashboardNavbar = () => {
           </div>
           <div>
             {" "}
-            <a href="#" className="text-white hover:text-gray-300">
+            <button
+              onClick={handleLogout}
+              className="text-white hover:text-gray-300"
+            >
               Logout
-            </a>
+            </button>
           </div>
 
           <div className="md:hidden relative">

@@ -3,17 +3,17 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import decodeToken from "../utils/decodeToken";
+import { useUserStore } from "@/stores/userStore";
+import decodeToken from "../../utils/decodeToken";
 
 export default function RegisterPage() {
+  const { user, setUser } = useUserStore();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginInProgress, setLoginInprogress] = useState(false);
 
   async function handleFormSubmit(ev) {
-    console.log("....");
     ev.preventDefault();
     const response = await fetch(`https://labs.mhdaris.me/api/users/login`, {
       method: "POST",
@@ -25,9 +25,8 @@ export default function RegisterPage() {
     if (response.ok) {
       const data = await response.json();
       const decodedUser = decodeToken(data.token);
-
       window.localStorage.setItem("token", data.token);
-      console.log(decodedUser);
+      setUser(decodedUser);
       if (decodedUser.role == "User") {
         router.push("/");
       } else {

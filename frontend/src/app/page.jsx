@@ -6,11 +6,12 @@ import Icons from "./component/icons/page";
 import Menu from "./component/menu";
 import Image from "next/image";
 import Navbar from "./component/navbar";
-
+import { useUserStore } from "@/stores/userStore";
 
 const Home = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
-
+  const { user } = useUserStore();
+  console.log(user);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleScroll = () => {
