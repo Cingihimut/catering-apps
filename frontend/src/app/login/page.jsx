@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginInProgress, setLoginInprogress] = useState(false);
-  const API_URL = process.env.API_URL + "/api/users/register";
+  const API_URL = process.env.API_URL + "/api/users/login";
 
   async function handleFormSubmit(ev) {
     ev.preventDefault();

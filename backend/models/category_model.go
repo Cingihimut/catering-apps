@@ -9,8 +9,8 @@ import (
 type Categories struct {
 	ID        uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name      string         `gorm:"type:varchar(255)" json:"name"`
-	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	CreatedAt time.Time      `gorm:"autoCreateTime" json:"-"`
+	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"-"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
-	Products  []Products     `gorm:"many2many:product_categories" json:"products"`
+	Products  []Products     `gorm:"many2many:product_categories" json:"-"`
 }

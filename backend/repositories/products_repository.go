@@ -141,7 +141,6 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 
 	return products, nil
 }
-
 func (r *ProductRepository) GetAllProductsFromViews() ([]models.Products, error) {
 	var products []models.Products
 
@@ -178,16 +177,19 @@ func (r *ProductRepository) GetAllProductsFromViews() ([]models.Products, error)
 			return nil, err
 		}
 
-		err = json.Unmarshal([]byte(images), &product.Images)
-		if err != nil {
-			return nil, err
+		if categories != "null" {
+			err = json.Unmarshal([]byte(categories), &product.Categories)
+			if err != nil {
+				return nil, err
+			}
 		}
 
-		err = json.Unmarshal([]byte(categories), &product.Categories)
-		if err != nil {
-			return nil, err
+		if images != "null" {
+			err = json.Unmarshal([]byte(images), &product.Images)
+			if err != nil {
+				return nil, err
+			}
 		}
-
 		products = append(products, product)
 	}
 
