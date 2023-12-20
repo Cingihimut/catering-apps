@@ -107,6 +107,7 @@ export default function RegisterPage() {
           </p>
           <button
             type="submit"
+            onSubmit={handleFormSubmit}
             className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-200"
           >
             Register
