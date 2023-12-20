@@ -46,6 +46,7 @@ func (c *UserController) Register(ctx *gin.Context) {
 }
 
 func (c *UserController) RegisterOwner(ctx *gin.Context) {
+	
 	var user models.Users
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

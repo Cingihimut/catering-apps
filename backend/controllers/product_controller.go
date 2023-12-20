@@ -47,7 +47,6 @@ func (c *ProductController) Create(ctx *gin.Context) {
 	fmt.Printf("Product Name: %s\n", product.ProductName)
 	fmt.Printf("Description: %s\n", product.Description)
 	fmt.Printf("Price: %f\n", product.Price)
-	// ... cetak field lainnya
 
 	price, err := strconv.ParseFloat(ctx.PostForm("price"), 64)
 	if err != nil {
