@@ -7,10 +7,8 @@ import (
 )
 
 func InitCategoryRoutes(router *gin.Engine, categoryController *controllers.CategoryController) {
-	categoryRoutes := router.Group("/api/categories")
-	{
-		categoryRoutes.POST("/", middlewares.AuthMiddleware(), categoryController.CreateCategory)
-		categoryRoutes.PUT("/:id", middlewares.AuthMiddleware(), categoryController.UpdateCategory)
-		categoryRoutes.DELETE("/:id", middlewares.AuthMiddleware(), categoryController.DeleteCategory)
-	}
+	// router.POST("/api/categories", categoryController.GetAll())
+	router.POST("/api/categories", middlewares.AuthMiddleware(), categoryController.CreateCategory)
+	router.PUT("/api/categories/:id", middlewares.AuthMiddleware(), categoryController.UpdateCategory)
+	router.DELETE("/api/categories/:id", middlewares.AuthMiddleware(), categoryController.DeleteCategory)
 }
