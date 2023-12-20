@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function DashboardLayout({ children }) {
   return (
-      <body className={inter.className} suppressHydrationWarning >
+      <body suppressHydrationWarning >
         <DashboardNavbar />
 
         <div className="container">
