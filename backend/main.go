@@ -34,7 +34,7 @@ func main() {
 	userController := controllers.NewUserController(userService)
 	routes.InitUserRoutes(appConfig.App, userController)
 
-	// product route
+	// Product
 	productRepository := repositories.NewProductRepository(appConfig.DB)
 	productService := services.NewProductService(*productRepository)
 	productController := controllers.NewProductController(productService)

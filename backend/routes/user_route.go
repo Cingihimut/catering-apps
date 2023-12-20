@@ -9,6 +9,6 @@ import (
 func InitUserRoutes(router *gin.Engine, uc *controllers.UserController) {
 
 	router.POST("/api/users/register", uc.Register)
-	router.POST("/api/users/register-owner",middlewares.OwnerMiddleware(), uc.RegisterOwner)
+	router.POST("/api/users/register-owner", middlewares.OwnerMiddleware(), uc.RegisterOwner)
 	router.POST("/api/users/login", uc.Login)
 }
