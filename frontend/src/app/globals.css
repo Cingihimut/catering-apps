@@ -86,6 +86,7 @@
   color: #ff0000;
 }
 
+input[type="name"],
 input[type="email"],
 input[type="password"],
 input[type="text"] {

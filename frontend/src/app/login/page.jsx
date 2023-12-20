@@ -11,9 +11,19 @@ export default function RegisterPage() {
 
   async function handleFormSubmit(ev) {
     ev.preventDefault();
+    const response = await fetch(`${process.env.API_UR}/api/users/login`, {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+         "Content-Type": "application/json",
+     },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const token = data.token;
+      window.localStorage.setItem("user-token", token);
+    }
     setLoginInprogress(true);
-
-    setLoginInprogress;
   }
   return (
     <section className="mt-8">
@@ -35,7 +45,11 @@ export default function RegisterPage() {
           disabled={loginInProgress}
           onChange={(ev) => setPassword(ev.target.value)}
         />
-        <button className="bg-color text-white" type="submit" disabled={loginInProgress}>
+        <button
+          className="bg-color text-white"
+          type="submit"
+          disabled={loginInProgress}
+        >
           Login
         </button>
         <div className="my-4 text-center text-gray-500">Or login With</div>

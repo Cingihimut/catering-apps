@@ -1,13 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 import { AddProductForm } from "./AddProductForm";
-import { columns } from "./table/columns";
-import { DataTable } from "./table/DataTable";
+import { ProductsTable } from "./table/ProductsTable";
 
-const API_URL = "http://localhost:8080/api/products";
-
-async function fetchData(url) {
-  const response = await fetch(url);
+const API_URL = process.env.API_URL + "/api/products";
+async function fetchData() {
+  const response = await fetch(API_URL);
   if (!response.ok) {
     throw new Error(`Failed to fetch data. Status: ${response.status}`);
   }
@@ -16,7 +14,7 @@ async function fetchData(url) {
 
 export async function asyncData() {
   try {
-    const data = await fetchData(API_URL);
+    const data = await fetchData();
     return data.data;
   } catch (error) {
     console.error(error.message);
@@ -35,7 +33,7 @@ const DashboardTabs = async () => {
       </TabsList>
       <TabsContent value="daftar">
         <div className="container w-full">
-          <DataTable columns={columns} data={data} />
+          <ProductsTable data={data} />
         </div>
       </TabsContent>
       <TabsContent value="tambah">

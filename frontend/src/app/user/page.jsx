@@ -1,5 +1,7 @@
 import React from "react";
 
-export const pageUser = () => {
+const pageUser = () => {
   return <div>pageUser</div>;
 };
+
+export default pageUser;
