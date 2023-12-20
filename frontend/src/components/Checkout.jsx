@@ -14,7 +14,7 @@ const Checkout = () => {
       id: product.id,
       productName: product.name,
       price: product.price,
-      quantity: 3
+      quantity: 1
     }
 
     const response = await fetch("/api/tokenizer", {
