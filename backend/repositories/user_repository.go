@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"time"
-
 	"github.com/Cingihimut/catering-apps/models"
 
 	"gorm.io/gorm"
@@ -20,9 +18,8 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 
 func (r *UserRepository) Create(user *models.Users) (*models.Users, error) {
 	query := "INSERT INTO users (email, name, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
-	now := time.Now()
 
-	result := r.DB.Exec(query, user.Email, user.Name, user.Password, user.Role, now, now)
+	result := r.DB.Exec(query, user.Email, user.Name, user.Password, user.Role, user.CreatedAt, user.UpdatedAt)
 	if result.Error != nil {
 		return nil, result.Error
 	}

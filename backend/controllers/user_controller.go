@@ -71,7 +71,6 @@ func (c *UserController) RegisterOwner(ctx *gin.Context) {
 		"data":   userResponse,
 	})
 }
-
 func (c *UserController) Login(ctx *gin.Context) {
 	var user models.Users
 

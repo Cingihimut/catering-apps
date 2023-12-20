@@ -5,21 +5,23 @@ A web app for handling food catering orders
 
 ## 🖥💻🖥 Technology
 ### 🌐 Frontend
-- Javascript
-- NextJS Framework
-- Tailwind CSS
+- Javascript 
+- NextJS Framework https://nextjs.org/docs
+- Tailwind CSS https://tailwindcss.com/docs/installation
 
 ### 🌏 Backend
-- Golang
-- Gin Framework
+- Golang https://go.dev/doc/effective_go
+- Gin Framework https://github.com/gin-gonic
+- Gorm https://gorm.io/docs/
 
 ### 📂 Database
-- PostgreSQL
+- PostgreSQL https://www.postgresql.org/docs/
 
 ### 💸 Payment Gateway
-- Midtrans
+- Midtrans https://docs.midtrans.com/reference/quick-start-1
 
 ## 📱 Feature
-- Login & Register
+- Adopted CRUD E-commerce feature
 
 ## 🔌 API Requirement
+- Adopted E-commerce API Requirement
