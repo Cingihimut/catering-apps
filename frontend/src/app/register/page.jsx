@@ -1,4 +1,10 @@
+// REGISTER
 "use client";
+<<<<<<< HEAD
+import Image from "next/image";
+import { useState } from "react";
+import Link from "next/link";
+=======
 import React, { useState } from "react";
 <<<<<<< HEAD
 import "../globals.css";
@@ -8,15 +14,30 @@ import { useRouter } from "next/navigation";
 import { useRouter } from "next/router";
 import "../globals.css";
 >>>>>>> ab68c8cd872d067cf52898ba1c5c1ec294febc57
+>>>>>>> main
 
-const Register = () => {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+const API_URL = process.env.API_URL + "/api/users/register";
 
+<<<<<<< HEAD
+export default function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [creatingUser, setCreatingUser] = useState(false);
+  const [userCreated, setUserCreated] = useState(false);
+  async function handleFormSubmit(ev) {
+    ev.preventDefault();
+    setCreatingUser(true);
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ name, email, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(process.env);
+    if (response.ok) {
+      setCreatingUser(false);
+      setUserCreated(true);
+=======
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -56,10 +77,65 @@ const Register = () => {
       }
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
+>>>>>>> main
     }
-  };
-
+  }
   return (
+<<<<<<< HEAD
+    <section className="mt-8">
+      <h1 className="text-center color text-4xl">Register</h1>
+      {userCreated && (
+        <div className="my-4 text-center">
+          Register berhasil. masuk ke{" "}
+          <Link href={"/login"}>
+            {" "}
+            <span className="spanred">Login &raquo;</span>
+          </Link>
+        </div>
+      )}
+      <form className=" max-w-xs mx-auto" onSubmit={handleFormSubmit}>
+        <input
+          type="name"
+          placeholder="Full Name"
+          value={name}
+          disabled={creatingUser}
+          onChange={(ev) => setName(ev.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="email"
+          value={email}
+          disabled={creatingUser}
+          onChange={(ev) => setEmail(ev.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          value={password}
+          disabled={creatingUser}
+          onChange={(ev) => setPassword(ev.target.value)}
+        />
+        <button
+          className="bg-color text-white"
+          type="submit"
+          disabled={creatingUser}
+        >
+          Register
+        </button>
+        <div className="my-4 text-center text-gray-500">Or Login With</div>
+        <button className="border border-solid border-2 flex gap-4 justify-center font-semibold">
+          <Image src={"/google.png"} width={24} height={24} alt={"google"} />
+          Login with google
+        </button>
+        <div className="text-center my-4 text-gray-500">
+          Sudah punya akun?{" "}
+          <Link className="underline" href={"/login"}>
+            Login here
+          </Link>
+        </div>
+      </form>
+    </section>
+=======
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-green-500 to-green-600">
       <div className="bg-white p-8 rounded-lg shadow-md ">
         <h1 className="text-3xl font-bold mb-6">Register</h1>
@@ -119,6 +195,6 @@ const Register = () => {
         </form>
       </div>
     </div>
+>>>>>>> main
   );
-};
-export default Register;
+}

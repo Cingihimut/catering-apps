@@ -1,52 +1,76 @@
+// LOGIN
 "use client";
-import React, { useState } from "react";
-import "../globals.css";
-import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import decodeToken from "@/utils/decodeToken";
-import useStore from "@/stores/store";
+import { useUserStore } from "@/stores/userStore";
+import decodeToken from "../../utils/decodeToken";
 
-const Login = () => {
-  const setUser = useStore((state) => state.setUser);
-
+export default function RegisterPage() {
+  const { user, setUser } = useUserStore();
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginInProgress, setLoginInprogress] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:8080/api/sellers/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("accessToken", data.token);
-        console.log(data.token);
-        const decodedUser = decodeToken(data.token);
-        setUser({ email: decodedUser.email, id: decodedUser.id });
+  async function handleFormSubmit(ev) {
+    ev.preventDefault();
+    const response = await fetch(`https://labs.mhdaris.me/api/users/login`, {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const decodedUser = decodeToken(data.token);
+      window.localStorage.setItem("token", data.token);
+      setUser(decodedUser);
+      if (decodedUser.role == "User") {
         router.push("/");
       } else {
-        const gagal = await response.json();
-        console.log("Data respons JSON:", gagal);
-        console.error("Registrasi gagal");
+        router.push("/dashboard");
       }
-    } catch (error) {
-      console.error("Terjadi kesalahan:", error);
     }
-  };
-
+    setLoginInprogress(true);
+  }
   return (
+<<<<<<< HEAD
+    <section className="mt-8">
+      <h1 className="text-center color text-4xl">Login</h1>
+      <form className=" max-w-xs mx-auto" onSubmit={handleFormSubmit}>
+        <input
+          name="email"
+          type="email"
+          placeholder="email"
+          value={email}
+          disabled={loginInProgress}
+          onChange={(ev) => setEmail(ev.target.value)}
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="password"
+          value={password}
+          disabled={loginInProgress}
+          onChange={(ev) => setPassword(ev.target.value)}
+        />
+        <button
+          className="bg-color text-white"
+          type="submit"
+          disabled={loginInProgress}
+        >
+          Login
+        </button>
+        <div className="my-4 text-center text-gray-500">Or login With</div>
+        <button className="border border-solid border-2 flex gap-4 justify-center font-semibold">
+          <Image src={"/google.png"} width={24} height={24} alt={"google"} />
+          Login with google
+        </button>
+      </form>
+    </section>
+=======
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="bg-gray-100 p-9 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-6">Login</h1>
@@ -94,6 +118,6 @@ const Login = () => {
         </form>
       </div>
     </div>
+>>>>>>> main
   );
-};
-export default Login;
+}

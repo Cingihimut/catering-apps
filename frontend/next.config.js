@@ -1,16 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images:{
-        remotePatterns: [
-            {
-                hostname: "flowbite.s3.amazonaws.com"
-            },
-            {
-                hostname: "avatars.githubusercontent.com"
-            }
-        ]
-    }
+  env: {
+    API_URL: "https://labs.mhdaris.me",
+    JWT_SECRET: "CATERING",
+  },
+};
 
-}
-
-module.exports = nextConfig
+module.exports = nextConfig;

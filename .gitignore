@@ -1,6 +1,9 @@
 <<<<<<< HEAD
 .vscode/
 =======
+<<<<<<< HEAD
+.vscode/
+=======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -38,3 +41,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 >>>>>>> ab68c8cd872d067cf52898ba1c5c1ec294febc57
+>>>>>>> main
