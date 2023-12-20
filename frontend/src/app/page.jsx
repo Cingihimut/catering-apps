@@ -103,7 +103,7 @@ const Home = () => {
             href={"/"}
             className="text-center mb-4 mx-16 text-2xl text-gray-400"
           >
-            +62000000
+            +62000000x
           </Link>
         </div>
       </div>

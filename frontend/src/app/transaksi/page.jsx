@@ -35,9 +35,9 @@ const TransactionForm = ({ selectedMenuItem }) => {
   }, [selectedMenuItem]);
 
   return (
-    <div className="mt-12">
+    <div>
       <div>
-        <h1 className="font-semibold text-3xl text-center text-gray-400 underline">Yard carts</h1>
+        <h1 className="font-semibold text-3xl">carts</h1>
         <label>Alamat:</label>
         <input
           type="text"

@@ -65,9 +65,7 @@ export default function Navbar() {
                 Dashboard
               </button>
             </Link>
-            <button className="px-4 py-2 rounded" onClick={handleLogout}>
-              Log out
-            </button>
+            <button className="px-4 py-2 rounded" onClick={handleLogout}>Log out</button>
           </>
         )}
       </div>
