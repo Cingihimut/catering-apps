@@ -15,6 +15,7 @@ type Products struct {
 	ProductCategories []ProductCategories `gorm:"foreignKey:ProductID" json:"-"`
 	CartItems         []CartItems         `gorm:"foreignKey:ProductID" json:"-"`
 	TransactionItems  []TransactionItems  `gorm:"foreignKey:TransactionID" json:"-"`
+	Categories        []Categories        `gorm:"many2many:category_products" json:"-"`
 	CreatedAt         time.Time           `gorm:"autoCreateTime" json:"created_at,omitempty"`
 	UpdatedAt         time.Time           `gorm:"autoUpdateTime" json:"updated_at,omitempty"`
 	DeletedAt         gorm.DeletedAt      `gorm:"index" json:"deleted_at,omitempty"`
