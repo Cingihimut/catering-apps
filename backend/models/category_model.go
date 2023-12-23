@@ -7,10 +7,10 @@ import (
 )
 
 type Categories struct {
-	ID        uint           `gorm:"primaryKey;autoIncrement" json:"id"`
-	Name      string         `gorm:"type:varchar(255)" json:"name"`
-	CreatedAt time.Time      `gorm:"autoCreateTime" json:"-"`
-	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"-"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
-	Products  []Products     `gorm:"many2many:product_categories" json:"-"`
+	ID                uint                `gorm:"primaryKey;autoIncrement" json:"id"`
+	Name              string              `gorm:"type:varchar(255)" json:"name"`
+	ProductCategories []ProductCategories `gorm:"many2many:product_categories" json:"-"`
+	CreatedAt         time.Time           `gorm:"autoCreateTime" json:"created_at,omitempty"`
+	UpdatedAt         time.Time           `gorm:"autoUpdateTime" json:"updated_at,omitempty"`
+	DeletedAt         gorm.DeletedAt      `gorm:"index" json:"deleted_at,omitempty"`
 }

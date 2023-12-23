@@ -32,14 +32,14 @@ func InitDB() (*gorm.DB, error) {
 	migrator := db.Migrator()
 
 	migrator.CreateTable(&models.Users{})
-	migrator.CreateTable(&models.Address{})
+	migrator.CreateTable(&models.Addresses{})
 	migrator.CreateTable(&models.Categories{})
 	migrator.CreateTable(&models.Products{})
 	migrator.CreateTable(&models.ProductCategories{})
 	migrator.CreateTable(&models.ProductImages{})
-	migrator.CreateTable(&models.CartItem{})
-	migrator.CreateTable(&models.Cart{})
+	migrator.CreateTable(&models.CartItems{})
 	migrator.CreateTable(&models.Transactions{})
+	migrator.CreateTable(&models.TransactionItems{})
 
 	seedDummyData(db)
 	return db, nil
