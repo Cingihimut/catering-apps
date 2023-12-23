@@ -22,7 +22,7 @@ type Users struct {
 	Picture     string         `gorm:"type:varchar(255)" json:"picture,omitempty"`
 	PhoneNumber string         `gorm:"type:varchar(255)" json:"phone_number,omitempty"`
 	Addresses   []Addresses    `gorm:"foreignKey:OwnerID" json:"adresses"`
-	CartItems   []CartItems    `gorm:"many2many:user_cart_items;" json:"-"`
+	CartItems   []CartItems    `gorm:"foreignKey:OwnerID" json:"-"`
 	CreatedAt   time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt   time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
