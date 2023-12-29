@@ -37,7 +37,8 @@ func InitDB() (*gorm.DB, error) {
 	migrator.CreateTable(&models.Products{})
 	migrator.CreateTable(&models.ProductCategories{})
 	migrator.CreateTable(&models.ProductImages{})
-	migrator.CreateTable(&models.CartItems{})
+	migrator.CreateTable(&models.Cart{})
+	migrator.CreateTable(&models.CartItem{})
 	migrator.CreateTable(&models.Transactions{})
 	migrator.CreateTable(&models.TransactionItems{})
 
@@ -46,11 +47,9 @@ func InitDB() (*gorm.DB, error) {
 }
 
 func seedDummyData(db *gorm.DB) {
-	// Seed kategori
 	categories := []models.Categories{
-		{ID: 1, Name: "Electronics"},
-		{ID: 2, Name: "Clothing"},
-		// Tambahkan kategori lainnya sesuai kebutuhan
+		{ID: 1, Name: "Nasi"},
+		{ID: 2, Name: "Tumpeng"},
 	}
 
 	for _, category := range categories {
@@ -60,11 +59,9 @@ func seedDummyData(db *gorm.DB) {
 		}
 	}
 
-	// Seed produk
 	products := []models.Products{
-		{ProductName: "Laptop", Description: "Powerful laptop", Price: 1200.00},
-		{ProductName: "T-shirt", Description: "Comfortable t-shirt", Price: 20.00},
-		// Tambahkan produk lainnya sesuai kebutuhan
+		{ProductName: "Nasi Kusing", Description: "Nasi Kusing Sugi", Price: 1200},
+		{ProductName: "Tumpeng Hajatan ", Description: "Tum peng", Price: 20000},
 	}
 
 	for _, product := range products {
@@ -73,7 +70,6 @@ func seedDummyData(db *gorm.DB) {
 			return
 		}
 
-		// Seed gambar untuk setiap produk
 		for i := 0; i < 3; i++ {
 			image := models.ProductImages{
 				ID:        0,
@@ -86,9 +82,8 @@ func seedDummyData(db *gorm.DB) {
 			}
 		}
 
-		// Seed kategori untuk setiap produk
 		for _, category := range categories {
-			// Ada kemungkinan acak produk yang dimiliki oleh beberapa kategori
+
 			if rand.Intn(2) == 0 {
 				productCategory := models.ProductCategories{
 					ProductID:  product.ID,

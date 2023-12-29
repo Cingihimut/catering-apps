@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "Catering Apps API",
+    "description": "Postman collection for Catering Apps API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Uploads",
+      "item": [
+        {
+          "name": "GET /uploads/*filepath",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/uploads/*filepath",
+              "host": ["{{base_url}}"],
+              "path": ["uploads", "*filepath"]
+            }
+          }
+        },
+        {
+          "name": "HEAD /uploads/*filepath",
+          "request": {
+            "method": "HEAD",
+            "url": {
+              "raw": "{{base_url}}/uploads/*filepath",
+              "host": ["{{base_url}}"],
+              "path": ["uploads", "*filepath"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "POST /api/users/register",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/users/register"
+            }
+          }
+        },
+        {
+          "name": "POST /api/users/register-owner",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/users/register-owner"
+            }
+          }
+        },
+        {
+          "name": "POST /api/users/login",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/users/login"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Management",
+      "item": [
+        {
+          "name": "GET /api/products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/products"
+            }
+          }
+        },
+        {
+          "name": "POST /api/products",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/products"
+            }
+          }
+        },
+        {
+          "name": "PUT /api/products/:id",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/products/:id"
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/products/:id",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/products/:id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Category Management",
+      "item": [
+        {
+          "name": "POST /api/categories",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/categories"
+            }
+          }
+        },
+        {
+          "name": "PUT /api/categories/:id",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/categories/:id"
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/categories/:id",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/categories/:id"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

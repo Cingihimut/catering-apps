@@ -40,6 +40,7 @@ func (c *ProductRepository) Create(tx *gorm.DB, product *models.Products) (*mode
 }
 
 func (c *ProductRepository) SaveCategories(tx *gorm.DB, productID uint, categories []models.Categories) error {
+
 	tx.Exec("DELETE FROM product_categories WHERE product_id = ?", productID)
 
 	for _, category := range categories {
@@ -79,7 +80,7 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 	var products []models.Products
 
 	rawSQL := `
-		SELECT 
+		SELECT
 			p.id,
 			p.product_name,
 			p.description,
@@ -89,11 +90,11 @@ func (r *ProductRepository) GetAllProducts() ([]models.Products, error) {
 			i.id as image_id,
 			i.product_id,
 			i.image_url as image_url
-		FROM 
+		FROM
 			products p
-		LEFT JOIN 
+		LEFT JOIN
 			product_images i ON p.id = i.product_id
-		ORDER BY 
+		ORDER BY
 			p.id, i.id
 	`
 
@@ -190,12 +191,12 @@ func (r *ProductRepository) GetAllProductsFromViews() ([]models.Products, error)
 				return nil, err
 			}
 		}
+
 		products = append(products, product)
 	}
 
 	return products, nil
 }
-
 func (r *ProductRepository) getCategoriesForProduct(productID uint) ([]models.Categories, error) {
 	query := fmt.Sprintf(`
 		SELECT c.id, c.name

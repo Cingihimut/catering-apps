@@ -46,6 +46,12 @@ func main() {
 	categoriesController := controllers.NewCategoryController(categoriesService)
 	routes.InitCategoryRoutes(appConfig.App, categoriesController)
 
+	// Cart
+	cartRepository := repositories.NewCartRepository(appConfig.DB)
+	cartService := services.NewCartService(*cartRepository)
+	cartController := controllers.NewCartController(cartService)
+	routes.InitCartRoutes(appConfig.App, cartController)
+
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)

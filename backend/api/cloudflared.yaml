@@ -1,0 +1,8 @@
+tunnel: backend
+credentials-file: /home/ris/.cloudflared/backend.json
+warp-routing:
+  enabled: true
+ingress:
+  - hostname: dev.mhdaris.me
+    service: http://localhost:8080
+  - service: http_status:404

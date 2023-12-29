@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"time"
+
 	"github.com/Cingihimut/catering-apps/models"
 	"gorm.io/gorm"
 )
@@ -16,8 +18,10 @@ func NewCategoryRepository(db *gorm.DB) *CategoryRepository {
 }
 
 func (c *CategoryRepository) Create(category *models.Categories) (*models.Categories, error) {
-	query := "INSERT INTO categories (name) VALUES (?) RETURNING id"
-	result := c.DB.Raw(query, category.Name).Row()
+	category.CreatedAt = time.Now()
+	category.UpdatedAt = time.Now()
+	query := "INSERT INTO categories (name, created_at, updatedAt) VALUES (?,?,?) RETURNING id"
+	result := c.DB.Raw(query, category.Name, category.CreatedAt, category.UpdatedAt).Row()
 
 	if result.Err() != nil {
 		return nil, result.Err()
