@@ -8,8 +8,9 @@ import (
 
 func InitProductRoutes(router *gin.Engine, productController *controllers.ProductController) {
 
-	router.GET("/api/products", productController.GetAll)
-	router.GET("/api/products/:sellerId", productController.GetProductBySellerID)
+	router.GET("/api/products", productController.GetAllProducts)
 	router.POST("/api/products", middlewares.AuthMiddleware(), productController.Create)
+	router.PUT("/api/products/:id", middlewares.AuthMiddleware(), productController.Update)
+	router.DELETE("/api/products/:id", middlewares.AuthMiddleware(), productController.Delete)
 
 }

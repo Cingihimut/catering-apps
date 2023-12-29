@@ -3,22 +3,162 @@
 @tailwind utilities;
 
 .loading {
-    width:100px;
-    height:100px;
-    border-radius:50%;
-    padding:1px;
-    background:conic-gradient(#0000 10%,#6594df) content-box;
-    -webkit-mask:
-      repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
-      radial-gradient(farthest-side,#0000 calc(100% - 18px),#000 calc(100% - 16px));
-    -webkit-mask-composite: destination-in;
-    mask-composite: intersect;
-    animation:s4 0.5s infinite steps(10);
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  padding:1px;
+  background:conic-gradient(#0000 10%,#348545) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+    radial-gradient(farthest-side,#0000 calc(100% - 18px),#000 calc(100% - 16px));
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation:s4 0.5s infinite steps(10);
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 1rem;
   }
-  @keyframes s4 {to{transform: rotate(1turn)}}
-  .text-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142.4 71.8% 29.2%;
   }
+}
+
+
+.span {
+  color: #d5de17;
+}
+
+.color {
+  color: #74d600;
+}
+.bg-color {
+  background-color: #74d600;
+}
+
+.bg-color:hover{
+  background-color: #508c08;
+}
+
+.kuningb {
+  background-color: #d5de17;
+}
+.spanred {
+  color: #ff0000;
+}
+
+input[type="name"],
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  @apply block w-full my-2 rounded-xl;
+  @apply border p-2 border-gray-300 bg-gray-100;
+}
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="text"]:disabled {
+  @apply bg-gray-300 cursor-not-allowed;
+}
+
+button {
+  @apply block w-full text-gray-500 font-semibold;
+  @apply rounded-xl px-6 py-2;
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 140px;
+  padding-right: 140px;
+}
+@media screen and (max-width: 1536px) {
+  .wrapper {
+    max-width: 1366px;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .wrapper {
+    max-width: 1024px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    max-width: 768px;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .wrapper {
+    max-width: 640px;
+  }
+}
+@media screen and (max-width: 640px) {
+  .wrapper {
+    max-width: 475px;
+  }
+}

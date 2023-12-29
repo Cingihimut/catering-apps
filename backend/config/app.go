@@ -10,10 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-
-type AppConfig struct{
-	DB *gorm.DB
-	App *gin.Engine
+type AppConfig struct {
+	DB   *gorm.DB
+	App  *gin.Engine
 	Port int
 }
 
@@ -25,16 +24,15 @@ func LoadEnv() {
 	}
 }
 
-
-func LoadAppConfig() *AppConfig{
+func LoadAppConfig() *AppConfig {
 	port, err := strconv.Atoi(os.Getenv("APP_PORT"))
 	if err != nil {
-		// Default to port 8080 
+		// Default to port 8080
 		port = 8080
 	}
 
 	app := gin.Default()
-	
+
 	db, err := InitDB()
 	if err != nil {
 		panic(err)
@@ -42,8 +40,8 @@ func LoadAppConfig() *AppConfig{
 
 	return &AppConfig{
 		Port: port,
-		App: app,
-		DB: db,
+		App:  app,
+		DB:   db,
 	}
 
 }

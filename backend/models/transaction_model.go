@@ -16,16 +16,17 @@ const (
 )
 
 type Transactions struct {
-	ID            uint           `gorm:"primaryKey;autoIncrement" json:"id"`
-	OrderDate     time.Time      `json:"order_date"`
-	OrderTime     time.Time      `json:"order_time"`
-	BuyerID       uint           `gorm:"foreignKey:buyer_id;" json:"buyer_id"`
-	AddressId     uint           `gorm:"foreignKey:address_id" json:"address_id"`
-	CartID        uint           `gorm:"foreignKey:cart_id" json:"cart_id"`
-	Total         float64        `json:"total"`
-	PaymentMethod string         `json:"payment_method"`
-	Status        EnumStatus     `json:"status"`
-	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt     time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
+	ID               uint               `gorm:"primaryKey;autoIncrement" json:"id"`
+	OrderDate        time.Time          `gorm:"type:date;not null" json:"order_date"`
+	OrderTime        time.Time          `gorm:"type:time;not null" json:"order_time"`
+	AddressID        uint               `gorm:"index" json:"address_id"`
+	Total            float64            `gorm:"not null" json:"total"`
+	PaymentMethod    string             `gorm:"default:null" json:"payment_method"`
+	Delivery         bool               `gorm:"default:false" json:"delivery"`
+	Status           EnumStatus         `gorm:"default:'Pending'" json:"status"`
+	TransactionItems []TransactionItems `gorm:"foreignKey:TransactionID" json:"-"`
+	Products         []Products         `gorm:"many2many:transaction_items" json:"-"`
+	CreatedAt        time.Time          `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt        time.Time          `gorm:"autoUpdateTime" json:"updated_at"`
+	DeletedAt        gorm.DeletedAt     `gorm:"index" json:"deleted_at,omitempty"`
 }
