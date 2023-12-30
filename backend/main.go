@@ -52,6 +52,12 @@ func main() {
 	cartController := controllers.NewCartController(cartService)
 	routes.InitCartRoutes(appConfig.App, cartController)
 
+	// Transaction
+	transactionRepository := repositories.NewTransactionRepository(appConfig.DB)
+	transactionService := services.NewTransactionService(*transactionRepository)
+	transactionController := controllers.NewTransactionController(transactionService)
+	routes.InitTransactionRoutes(appConfig.App, transactionController)
+
 	// running server
 	serverAddress := fmt.Sprintf(":%d", appConfig.Port)
 	log.Printf("Server is running on %s\n", serverAddress)

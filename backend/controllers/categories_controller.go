@@ -38,7 +38,7 @@ func (c *CategoryController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	createdCategory, err := c.CategoryService.Create(&category)
+	_, err := c.CategoryService.Create(&category)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -49,7 +49,7 @@ func (c *CategoryController) CreateCategory(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"status": "success",
-		"data":   createdCategory,
+		"data":   "Category Added !",
 	})
 }
 func (c *CategoryController) UpdateCategory(ctx *gin.Context) {
@@ -71,20 +71,11 @@ func (c *CategoryController) UpdateCategory(ctx *gin.Context) {
 		return
 	}
 
-	var updatedCategory models.Categories
-	if err := ctx.ShouldBindJSON(updatedCategory); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
-
 	var updatedCategoryInput models.Categories
 	if err := ctx.ShouldBindJSON(&updatedCategoryInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
-			"message": err.Error(),
+			"message": "Invalid JSON format",
 		})
 		return
 	}
@@ -135,5 +126,22 @@ func (c *CategoryController) DeleteCategory(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  "success",
 		"message": "Category deleted successfully",
+	})
+}
+
+func (c *CategoryController) GetAll(ctx *gin.Context) {
+
+	result, err := c.CategoryService.GetAll()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   result,
 	})
 }

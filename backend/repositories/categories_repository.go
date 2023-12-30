@@ -20,36 +20,25 @@ func NewCategoryRepository(db *gorm.DB) *CategoryRepository {
 func (c *CategoryRepository) Create(category *models.Categories) (*models.Categories, error) {
 	category.CreatedAt = time.Now()
 	category.UpdatedAt = time.Now()
-	query := "INSERT INTO categories (name, created_at, updatedAt) VALUES (?,?,?) RETURNING id"
-	result := c.DB.Raw(query, category.Name, category.CreatedAt, category.UpdatedAt).Row()
+	query := "INSERT INTO categories (name, created_at, updated_at) VALUES (?,?,?) "
+	result := c.DB.Exec(query, category.Name, category.CreatedAt, category.UpdatedAt)
 
-	if result.Err() != nil {
-		return nil, result.Err()
+	if result.Error != nil {
+		return nil, result.Error
 	}
-
-	var insertedID uint
-	if err := result.Scan(&insertedID); err != nil {
-		return nil, err
-	}
-	category.ID = insertedID
 
 	return category, nil
 }
 
-func (c *CategoryRepository) Update(category *models.Categories) (*models.Categories, error) {
+func (c *CategoryRepository) Update(updatedCategoryInput *models.Categories) (*models.Categories, error) {
 	query := "UPDATE categories SET name = ? WHERE id = ? RETURNING id"
-	result := c.DB.Raw(query, category.Name, category.ID).Row()
+	result := c.DB.Exec(query, updatedCategoryInput.Name, updatedCategoryInput.ID)
 
-	if result.Err() != nil {
-		return nil, result.Err()
+	if result.Error != nil {
+		return nil, result.Error
 	}
 
-	var updatedCategory models.Categories
-	if err := result.Scan(&updatedCategory.ID); err != nil {
-		return nil, err
-	}
-
-	return &updatedCategory, nil
+	return updatedCategoryInput, nil
 }
 
 func (c *CategoryRepository) Delete(id uint) error {

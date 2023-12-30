@@ -74,7 +74,7 @@ func seedDummyData(db *gorm.DB) {
 			image := models.ProductImages{
 				ID:        0,
 				ProductID: product.ID,
-				ImageURL:  "",
+				ImageURL:  "test.jpeg",
 			}
 			if err := db.Create(&image).Error; err != nil {
 				fmt.Println("Error seeding product image:", err)

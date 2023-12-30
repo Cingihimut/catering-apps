@@ -19,8 +19,8 @@ func (s *CategoryService) Create(category *models.Categories) (*models.Categorie
 	return s.CategoryRepository.Create(category)
 }
 
-func (s *CategoryService) Update(category *models.Categories) (*models.Categories, error) {
-	return s.CategoryRepository.Update(category)
+func (s *CategoryService) Update(updatedCategoryInput *models.Categories) (*models.Categories, error) {
+	return s.CategoryRepository.Update(updatedCategoryInput)
 }
 
 func (s *CategoryService) Delete(id uint) error {

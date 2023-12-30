@@ -1,8 +1,10 @@
 {
   "info": {
+    "_postman_id": "23304aa7-670e-45a4-b487-c22616cb12ff",
     "name": "Catering Apps API",
     "description": "Postman collection for Catering Apps API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "27768080"
   },
   "item": [
     {
@@ -12,23 +14,19 @@
           "name": "GET /uploads/*filepath",
           "request": {
             "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/uploads/*filepath",
-              "host": ["{{base_url}}"],
-              "path": ["uploads", "*filepath"]
-            }
-          }
+            "header": [],
+            "url": "{{BASE_URL}}/uploads/*filepath"
+          },
+          "response": []
         },
         {
           "name": "HEAD /uploads/*filepath",
           "request": {
             "method": "HEAD",
-            "url": {
-              "raw": "{{base_url}}/uploads/*filepath",
-              "host": ["{{base_url}}"],
-              "path": ["uploads", "*filepath"]
-            }
-          }
+            "header": [],
+            "url": "{{BASE_URL}}/uploads/*filepath"
+          },
+          "response": []
         }
       ]
     },
@@ -39,28 +37,61 @@
           "name": "POST /api/users/register",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{base_url}}/api/users/register"
-            }
-          }
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\" : \"Mhd Aris\",\n    \"email\" : \"ris@user.com\",\n    \"password\" : \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{BASE_URL}}/api/users/register"
+          },
+          "response": []
         },
         {
           "name": "POST /api/users/register-owner",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{base_url}}/api/users/register-owner"
-            }
-          }
+            "header": [
+              {
+                "key": "X-Access-Key",
+                "value": "Owner",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\" : \"Owner Aris\",\n    \"email\" : \"ris@owner.com\",\n    \"password\" : \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{BASE_URL}}/api/users/register-owner"
+          },
+          "response": []
         },
         {
           "name": "POST /api/users/login",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{base_url}}/api/users/login"
-            }
-          }
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\" : \"ris@user.com\",\n    \"password\" : \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{BASE_URL}}/api/users/login"
+          },
+          "response": []
         }
       ]
     },
@@ -71,37 +102,55 @@
           "name": "GET /api/products",
           "request": {
             "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/api/products"
-            }
-          }
+            "header": [],
+            "url": "{{BASE_URL}}/api/products"
+          },
+          "response": []
         },
         {
           "name": "POST /api/products",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{base_url}}/api/products"
-            }
-          }
+            "header": [],
+            "url": "{{BASE_URL}}/api/products"
+          },
+          "response": []
         },
         {
           "name": "PUT /api/products/:id",
           "request": {
             "method": "PUT",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/api/products/:id"
+              "raw": "{{BASE_URL}}/api/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "DELETE /api/products/:id",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/api/products/:id"
+              "raw": "{{BASE_URL}}/api/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -112,31 +161,112 @@
           "name": "POST /api/categories",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{base_url}}/api/categories"
-            }
-          }
+            "header": [],
+            "url": "{{BASE_URL}}/api/categories"
+          },
+          "response": []
         },
         {
           "name": "PUT /api/categories/:id",
           "request": {
             "method": "PUT",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/api/categories/:id"
+              "raw": "{{BASE_URL}}/api/categories/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "DELETE /api/categories/:id",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/api/categories/:id"
+              "raw": "{{BASE_URL}}/api/categories/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
             }
-          }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get User Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpc0B1c2VyLmNvbSIsImV4cCI6MTcwMzk1Nzk3MSwiaWQiOjE4LCJuYW1lIjoiTWhkIEFyaXMiLCJyb2xlIjoiVXNlciJ9.g5XqKUFeQL9LbwGTimGT9CLjElfjhmgCMm_Su9Fi2qE"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{BASE_URL}}/api/cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Product To Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpc0B1c2VyLmNvbSIsImV4cCI6MTcwMzk1Nzk3MSwiaWQiOjE4LCJuYW1lIjoiTWhkIEFyaXMiLCJyb2xlIjoiVXNlciJ9.g5XqKUFeQL9LbwGTimGT9CLjElfjhmgCMm_Su9Fi2qE"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"product_id\" : 2,\n    \"quantity\" : 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{BASE_URL}}/api/cart"
+          },
+          "response": []
         }
       ]
     }
   ],
-  "protocolProfileBehavior": {}
+  "auth": {
+    "type": "bearer",
+    "bearer": {}
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
 }

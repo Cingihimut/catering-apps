@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"encoding/json"
+	"log"
+
 	"github.com/Cingihimut/catering-apps/models"
 	"github.com/Cingihimut/catering-apps/models/converter"
 
@@ -40,36 +43,36 @@ func (r *CartRepository) GetUserCart(userID uint) ([]converter.UserCartProduct, 
 	var userCartProducts []converter.UserCartProduct
 
 	rawSQL := `
-	SELECT
-    p.id ,
-    p.product_name,
-    p.description,
-    p.price,
-    ci.quantity,
-    JSON_AGG(DISTINCT json_build_object(
-        'id', i.id,
-        'product_id', i.product_id,
-        'image_url', i.image_url
-    )::jsonb) AS images
-FROM
-    carts c
-JOIN
-    cart_items ci ON c.id = ci.cart_id
-JOIN
-    products p ON ci.product_id = p.id
-LEFT JOIN
-    product_images i ON p.id = i.product_id
-WHERE
-    c.user_id = ?
-GROUP BY
-    p.id, product_name, description, price, ci.quantity;
+	SELECT DISTINCT ON (products.id) 
+			products.id, 
+			products.product_name, 
+			products.description, 
+			products.price, 
+			JSON_AGG(DISTINCT json_build_object('image_url', product_images.image_url)::jsonb) AS Images, 
+			JSON_AGG(DISTINCT json_build_object('name', categories.name)::jsonb) AS categories,
+			products.created_at, 
+			products.updated_at
+		FROM products
+		JOIN cart_items ON products.id = cart_items.product_id
+		JOIN carts ON cart_items.cart_id = carts.id
+		LEFT JOIN product_images ON products.id = product_images.product_id
+		LEFT JOIN product_categories ON products.id = product_categories.product_id
+		LEFT JOIN categories ON product_categories.category_id = categories.id
+		WHERE carts.user_id = ?
+		GROUP BY products.id, products.product_name, products.description, products.price, products.created_at, products.updated_at
+		ORDER BY products.id;
 
 	`
 
-	if err := r.DB.Raw(rawSQL, userID).Scan(&userCartProducts).Error; err != nil {
+	if err := r.DB.Debug().Raw(rawSQL, userID).Scan(&userCartProducts).Error; err != nil {
 		return nil, err
 	}
+	jsonData, err := json.Marshal(userCartProducts)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	log.Printf("JSON DATA : %v", string(jsonData))
 	return userCartProducts, nil
 
 }
